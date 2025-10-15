@@ -1,6 +1,9 @@
 import React from 'react'
+import { useLoading } from '../contexts/LoadingContext'
 
 const LoadingPage = () => {
+  const { loadingMessage, loadingProgress } = useLoading()
+
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center z-50">
       <div className="text-center">
@@ -14,9 +17,9 @@ const LoadingPage = () => {
           </div>
         </div>
 
-        {/* Texte de chargement */}
+        {/* Texte de chargement dynamique */}
         <h2 className="text-3xl font-bold text-white mb-4 animate-pulse">
-          Chargement...
+          {loadingMessage}
         </h2>
         
         {/* Sous-titre */}
@@ -24,12 +27,16 @@ const LoadingPage = () => {
           Préparation de votre boutique
         </p>
 
-        {/* Barre de progression */}
-        <div className="w-64 mx-auto">
-          <div className="bg-white/20 rounded-full h-2 overflow-hidden">
-            <div className="bg-gradient-to-r from-purple-400 to-blue-400 h-full rounded-full animate-pulse" style={{
-              animation: 'loading-bar 2s ease-in-out infinite'
-            }}></div>
+        {/* Barre de progression avec pourcentage */}
+        <div className="w-64 mx-auto mb-4">
+          <div className="bg-white/20 rounded-full h-3 overflow-hidden">
+            <div 
+              className="bg-gradient-to-r from-purple-400 to-blue-400 h-full rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${loadingProgress}%` }}
+            ></div>
+          </div>
+          <div className="text-white/80 text-sm mt-2">
+            {loadingProgress}%
           </div>
         </div>
 
@@ -40,15 +47,6 @@ const LoadingPage = () => {
           <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
         </div>
       </div>
-
-      {/* Styles CSS pour l'animation de la barre de progression */}
-      <style jsx>{`
-        @keyframes loading-bar {
-          0% { width: 0%; }
-          50% { width: 70%; }
-          100% { width: 100%; }
-        }
-      `}</style>
     </div>
   )
 }
