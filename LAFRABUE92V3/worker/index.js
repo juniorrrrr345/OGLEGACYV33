@@ -303,14 +303,22 @@ function transformProduct(p) {
 }
 
 async function getProducts(env, corsHeaders) {
-  const { results } = await env.DB.prepare('SELECT * FROM products ORDER BY createdAt DESC').all()
-  
-  // Transformer les produits pour avoir toujours des variants
-  const products = results.map(transformProduct)
+  try {
+    const { results } = await env.DB.prepare('SELECT * FROM products ORDER BY createdAt DESC').all()
+    
+    // Transformer les produits pour avoir toujours des variants
+    const products = results.map(transformProduct)
 
-  return new Response(JSON.stringify(products), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-  })
+    return new Response(JSON.stringify(products), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  } catch (error) {
+    console.error('Error fetching products:', error)
+    // Retourner un tableau vide en cas d'erreur de base de données
+    return new Response(JSON.stringify([]), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  }
 }
 
 async function getProduct(id, env, corsHeaders) {
