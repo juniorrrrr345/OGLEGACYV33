@@ -20,20 +20,28 @@ export const LoadingProvider = ({ children }) => {
   useEffect(() => {
     const loadApp = async () => {
       try {
-        setLoadingMessage('Initialisation...')
-        setLoadingProgress(20)
-        await new Promise(resolve => setTimeout(resolve, 500))
+        setLoadingMessage('🚀 Initialisation de votre boutique...')
+        setLoadingProgress(15)
+        await new Promise(resolve => setTimeout(resolve, 600))
 
-        setLoadingMessage('Chargement des paramètres...')
-        setLoadingProgress(40)
-        await new Promise(resolve => setTimeout(resolve, 500))
+        setLoadingMessage('✨ Chargement des produits premium...')
+        setLoadingProgress(30)
+        await new Promise(resolve => setTimeout(resolve, 700))
 
-        setLoadingMessage('Préparation de la boutique...')
+        setLoadingMessage('🎨 Application de votre thème personnalisé...')
+        setLoadingProgress(50)
+        await new Promise(resolve => setTimeout(resolve, 600))
+
+        setLoadingMessage('🛍️ Préparation de votre expérience shopping...')
         setLoadingProgress(70)
         await new Promise(resolve => setTimeout(resolve, 500))
 
-        setLoadingMessage('Finalisation...')
-        setLoadingProgress(90)
+        setLoadingMessage('💎 Optimisation des performances...')
+        setLoadingProgress(85)
+        await new Promise(resolve => setTimeout(resolve, 400))
+
+        setLoadingMessage('🎉 Presque prêt...')
+        setLoadingProgress(95)
         await new Promise(resolve => setTimeout(resolve, 300))
 
         setLoadingProgress(100)
