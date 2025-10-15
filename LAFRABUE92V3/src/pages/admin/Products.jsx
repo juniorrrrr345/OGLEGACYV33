@@ -330,11 +330,8 @@ const AdminProducts = () => {
               setShowModal(false)
               fetchProducts()
               
-              // Afficher le slide pour tous les nouveaux produits
-              if (productData) {
-                setPendingProductData(productData)
-                setShowFarmSocialSlide(true)
-              }
+              // Ne plus afficher automatiquement le slide de partage
+              // L'utilisateur peut utiliser le bouton de partage manuellement
             }}
           />
         )}
