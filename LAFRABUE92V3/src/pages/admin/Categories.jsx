@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getAll, save, remove } from '../../utils/api'
 import { uploadToR2 } from '../../utils/cloudflare'
+import FarmSocialSlide from '../../components/FarmSocialSlide'
 
 const AdminCategories = () => {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editingCategory, setEditingCategory] = useState(null)
+  const [showFarmSocialSlide, setShowFarmSocialSlide] = useState(false)
+  const [pendingCategoryData, setPendingCategoryData] = useState(null)
 
   useEffect(() => {
     fetchCategories()
@@ -113,13 +116,36 @@ const AdminCategories = () => {
           <CategoryModal
             category={editingCategory}
             onClose={() => setShowModal(false)}
-            onSuccess={() => {
+            onSuccess={(categoryData) => {
               setShowModal(false)
               fetchCategories()
+              
+              // Afficher le slide pour les nouvelles catégories
+              if (categoryData && !editingCategory) {
+                setPendingCategoryData(categoryData)
+                setShowFarmSocialSlide(true)
+              }
             }}
           />
         )}
       </AnimatePresence>
+
+      {/* Social Share Slide */}
+      <FarmSocialSlide
+        isOpen={showFarmSocialSlide}
+        onClose={() => {
+          setShowFarmSocialSlide(false)
+          setPendingCategoryData(null)
+        }}
+        onConfirm={(shareData) => {
+          console.log('Données de partage:', shareData)
+          alert(`Catégorie partagée sur ${shareData.socials.length} réseau(x) social(aux) !`)
+          setShowFarmSocialSlide(false)
+          setPendingCategoryData(null)
+        }}
+        productData={pendingCategoryData}
+        contentType="category"
+      />
     </div>
   )
 }

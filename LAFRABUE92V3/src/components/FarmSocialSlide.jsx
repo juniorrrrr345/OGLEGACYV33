@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getAll } from '../utils/api'
 
-const FarmSocialSlide = ({ isOpen, onClose, onConfirm, productData }) => {
+const FarmSocialSlide = ({ isOpen, onClose, onConfirm, productData, contentType = 'product' }) => {
   const [socials, setSocials] = useState([])
   const [selectedSocials, setSelectedSocials] = useState([])
   const [customMessage, setCustomMessage] = useState('')
@@ -11,10 +11,25 @@ const FarmSocialSlide = ({ isOpen, onClose, onConfirm, productData }) => {
   useEffect(() => {
     if (isOpen) {
       fetchSocials()
-      // Message par défaut pour les produits farm
-      setCustomMessage(`🌾 Nouveau produit de la ferme disponible !\n\n${productData?.name || 'Produit'}\n${productData?.description || ''}\n\nDécouvrez nos produits frais et locaux ! 🚜`)
+      // Message par défaut selon le type de contenu
+      setCustomMessage(generateDefaultMessage(contentType, productData))
     }
-  }, [isOpen, productData])
+  }, [isOpen, productData, contentType])
+
+  const generateDefaultMessage = (type, data) => {
+    switch (type) {
+      case 'product':
+        return `🛍️ Nouveau produit disponible !\n\n${data?.name || 'Produit'}\n${data?.description || ''}\n\nDécouvrez nos produits ! 🛒`
+      case 'farm':
+        return `🌾 Nouvelle ferme ajoutée !\n\n${data?.name || 'Ferme'}\n\nDécouvrez nos producteurs locaux ! 🚜`
+      case 'category':
+        return `📂 Nouvelle catégorie disponible !\n\n${data?.name || 'Catégorie'}\n${data?.description || ''}\n\nExplorez nos produits ! 🛍️`
+      case 'social':
+        return `📱 Nouveau réseau social ajouté !\n\n${data?.name || 'Réseau social'}\n${data?.description || ''}\n\nSuivez-nous ! 👥`
+      default:
+        return `✨ Nouveau contenu disponible !\n\n${data?.name || 'Contenu'}\n${data?.description || ''}\n\nDécouvrez plus ! 🎉`
+    }
+  }
 
   const fetchSocials = async () => {
     try {
@@ -89,14 +104,37 @@ const FarmSocialSlide = ({ isOpen, onClose, onConfirm, productData }) => {
     const baseMessage = customMessage
     const socialName = social.name.toLowerCase()
     
+    // Générer des hashtags selon le type de contenu
+    const getHashtags = () => {
+      switch (contentType) {
+        case 'product':
+          return '#NouveauProduit #Boutique #ProduitsFrais #Shopping #Découverte'
+        case 'farm':
+          return '#FermeLocale #ProduitsFrais #Agriculture #Bio #Local #FarmToTable #Ferme #AgricultureDurable'
+        case 'category':
+          return '#NouvelleCatégorie #Boutique #Produits #Shopping #Organisation'
+        case 'social':
+          return '#RéseauxSociaux #Contact #Communication #SuivezNous #Social'
+        default:
+          return '#NouveauContenu #Boutique #Découverte #Actualité'
+      }
+    }
+    
     if (socialName.includes('instagram')) {
-      return `${baseMessage}\n\n#FermeLocale #ProduitsFrais #Agriculture #Bio #Local #FarmToTable #Ferme #AgricultureDurable`
+      return `${baseMessage}\n\n${getHashtags()}`
     } else if (socialName.includes('facebook')) {
-      return `${baseMessage}\n\n#FermeLocale #ProduitsFrais #Agriculture #Bio #Local`
+      return `${baseMessage}\n\n${getHashtags()}`
     } else if (socialName.includes('twitter') || socialName.includes('x')) {
-      return `${baseMessage}\n\n#FermeLocale #ProduitsFrais #Agriculture #Bio #Local #FarmToTable`
+      return `${baseMessage}\n\n${getHashtags()}`
     } else if (socialName.includes('whatsapp')) {
-      return `🌾 Nouveau produit disponible !\n\n${productData?.name || 'Produit'}\n\nCommandez maintenant ! 🛒`
+      const shortMessage = contentType === 'product' 
+        ? `🛍️ Nouveau produit disponible !\n\n${productData?.name || 'Produit'}\n\nCommandez maintenant ! 🛒`
+        : contentType === 'farm'
+        ? `🌾 Nouvelle ferme ajoutée !\n\n${productData?.name || 'Ferme'}\n\nDécouvrez nos producteurs ! 🚜`
+        : contentType === 'category'
+        ? `📂 Nouvelle catégorie !\n\n${productData?.name || 'Catégorie'}\n\nExplorez nos produits ! 🛍️`
+        : `📱 Nouveau réseau social !\n\n${productData?.name || 'Réseau'}\n\nSuivez-nous ! 👥`
+      return shortMessage
     }
     
     return baseMessage
@@ -129,7 +167,12 @@ const FarmSocialSlide = ({ isOpen, onClose, onConfirm, productData }) => {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">Partager sur les réseaux</h2>
-                  <p className="text-gray-400 text-sm">Promouvoir votre produit farm</p>
+                  <p className="text-gray-400 text-sm">
+                    {contentType === 'product' && 'Promouvoir votre produit'}
+                    {contentType === 'farm' && 'Promouvoir votre ferme'}
+                    {contentType === 'category' && 'Promouvoir votre catégorie'}
+                    {contentType === 'social' && 'Promouvoir votre réseau social'}
+                  </p>
                 </div>
               </div>
               <button
@@ -143,28 +186,37 @@ const FarmSocialSlide = ({ isOpen, onClose, onConfirm, productData }) => {
 
           {/* Content */}
           <div className="p-6 space-y-6">
-            {/* Product Preview */}
+            {/* Content Preview */}
             <div className="bg-slate-800/50 rounded-xl p-4 border border-gray-700/30">
               <div className="flex items-center space-x-3">
                 <div className="w-16 h-16 bg-slate-700 rounded-lg flex items-center justify-center text-2xl">
-                  {productData?.photo ? (
+                  {contentType === 'product' && (productData?.photo ? (
                     <img 
                       src={productData.photo} 
                       alt={productData.name}
                       className="w-full h-full object-cover rounded-lg"
                     />
-                  ) : (
-                    '🌾'
-                  )}
+                  ) : '🛍️')}
+                  {contentType === 'farm' && '🌾'}
+                  {contentType === 'category' && (productData?.icon || '📂')}
+                  {contentType === 'social' && (productData?.icon || '📱')}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-white font-semibold truncate">{productData?.name || 'Produit'}</h3>
+                  <h3 className="text-white font-semibold truncate">{productData?.name || 'Contenu'}</h3>
                   <p className="text-gray-400 text-sm line-clamp-2">{productData?.description || ''}</p>
                   <div className="flex items-center space-x-2 mt-1">
-                    <span className="px-2 py-1 bg-green-600/20 text-green-400 text-xs rounded-full">
-                      Farm
+                    <span className={`px-2 py-1 text-xs rounded-full ${
+                      contentType === 'product' ? 'bg-blue-600/20 text-blue-400' :
+                      contentType === 'farm' ? 'bg-green-600/20 text-green-400' :
+                      contentType === 'category' ? 'bg-purple-600/20 text-purple-400' :
+                      'bg-pink-600/20 text-pink-400'
+                    }`}>
+                      {contentType === 'product' && 'Produit'}
+                      {contentType === 'farm' && 'Ferme'}
+                      {contentType === 'category' && 'Catégorie'}
+                      {contentType === 'social' && 'Réseau social'}
                     </span>
-                    {productData?.farm && (
+                    {contentType === 'product' && productData?.farm && (
                       <span className="px-2 py-1 bg-blue-600/20 text-blue-400 text-xs rounded-full">
                         {productData.farm}
                       </span>
@@ -226,7 +278,7 @@ const FarmSocialSlide = ({ isOpen, onClose, onConfirm, productData }) => {
                 <button
                   type="button"
                   onClick={() => {
-                    setCustomMessage(`🌾 Nouveau produit de la ferme disponible !\n\n${productData?.name || 'Produit'}\n${productData?.description || ''}\n\nDécouvrez nos produits frais et locaux ! 🚜`)
+                    setCustomMessage(generateDefaultMessage(contentType, productData))
                   }}
                   className="text-xs text-green-400 hover:text-green-300 underline"
                 >

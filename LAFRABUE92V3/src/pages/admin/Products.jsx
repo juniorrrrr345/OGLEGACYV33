@@ -330,20 +330,17 @@ const AdminProducts = () => {
               setShowModal(false)
               fetchProducts()
               
-              // Vérifier si c'est un produit de catégorie farm
-              if (productData && productData.category) {
-                const category = categories.find(c => String(c.id) === String(productData.category))
-                if (category && category.name && category.name.toLowerCase().includes('farm')) {
-                  setPendingProductData(productData)
-                  setShowFarmSocialSlide(true)
-                }
+              // Afficher le slide pour tous les nouveaux produits
+              if (productData) {
+                setPendingProductData(productData)
+                setShowFarmSocialSlide(true)
               }
             }}
           />
         )}
       </AnimatePresence>
 
-      {/* Farm Social Slide */}
+      {/* Social Share Slide */}
       <FarmSocialSlide
         isOpen={showFarmSocialSlide}
         onClose={() => {
@@ -358,6 +355,7 @@ const AdminProducts = () => {
           setPendingProductData(null)
         }}
         productData={pendingProductData}
+        contentType="product"
       />
     </div>
   )

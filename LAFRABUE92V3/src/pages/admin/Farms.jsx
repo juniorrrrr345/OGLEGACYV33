@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getAll, save, remove } from '../../utils/api'
+import FarmSocialSlide from '../../components/FarmSocialSlide'
 
 const AdminFarms = () => {
   const [farms, setFarms] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editingFarm, setEditingFarm] = useState(null)
+  const [showFarmSocialSlide, setShowFarmSocialSlide] = useState(false)
+  const [pendingFarmData, setPendingFarmData] = useState(null)
 
   useEffect(() => {
     fetchFarms()
@@ -105,13 +108,36 @@ const AdminFarms = () => {
           <FarmModal
             farm={editingFarm}
             onClose={() => setShowModal(false)}
-            onSuccess={() => {
+            onSuccess={(farmData) => {
               setShowModal(false)
               fetchFarms()
+              
+              // Afficher le slide pour les nouvelles fermes
+              if (farmData && !editingFarm) {
+                setPendingFarmData(farmData)
+                setShowFarmSocialSlide(true)
+              }
             }}
           />
         )}
       </AnimatePresence>
+
+      {/* Social Share Slide */}
+      <FarmSocialSlide
+        isOpen={showFarmSocialSlide}
+        onClose={() => {
+          setShowFarmSocialSlide(false)
+          setPendingFarmData(null)
+        }}
+        onConfirm={(shareData) => {
+          console.log('Données de partage:', shareData)
+          alert(`Ferme partagée sur ${shareData.socials.length} réseau(x) social(aux) !`)
+          setShowFarmSocialSlide(false)
+          setPendingFarmData(null)
+        }}
+        productData={pendingFarmData}
+        contentType="farm"
+      />
     </div>
   )
 }
