@@ -14,6 +14,7 @@ export const LoadingProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [loadingMessage, setLoadingMessage] = useState('Chargement de votre boutique...')
   const [loadingProgress, setLoadingProgress] = useState(0)
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
 
   // Simulation du chargement initial de l'application
   useEffect(() => {
@@ -39,9 +40,11 @@ export const LoadingProvider = ({ children }) => {
         await new Promise(resolve => setTimeout(resolve, 200))
         
         setIsLoading(false)
+        setHasLoadedOnce(true)
       } catch (error) {
         console.error('Erreur lors du chargement:', error)
         setIsLoading(false)
+        setHasLoadedOnce(true)
       }
     }
 
@@ -49,6 +52,10 @@ export const LoadingProvider = ({ children }) => {
   }, [])
 
   const startLoading = (message = 'Chargement...') => {
+    // Ne pas afficher le chargement global si l'app a déjà été chargée une fois
+    if (hasLoadedOnce) {
+      return
+    }
     setIsLoading(true)
     setLoadingMessage(message)
     setLoadingProgress(0)
@@ -67,7 +74,7 @@ export const LoadingProvider = ({ children }) => {
   }
 
   const value = {
-    isLoading,
+    isLoading: hasLoadedOnce ? false : isLoading,
     loadingMessage,
     loadingProgress,
     startLoading,

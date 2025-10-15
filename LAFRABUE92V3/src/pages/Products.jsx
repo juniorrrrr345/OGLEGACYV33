@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Footer from '../components/Footer'
-import { useLoading } from '../contexts/LoadingContext'
+import ProductLoading from '../components/ProductLoading'
 
 const Products = () => {
   const [searchParams] = useSearchParams()
@@ -16,7 +16,8 @@ const Products = () => {
   const [selectedFarm, setSelectedFarm] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   const [previewProduct, setPreviewProduct] = useState(null)
-  const { startLoading, stopLoading, updateProgress } = useLoading()
+  const [loadingMessage, setLoadingMessage] = useState('Chargement des produits...')
+  const [loadingProgress, setLoadingProgress] = useState(0)
 
   useEffect(() => {
     fetchData()
@@ -41,34 +42,38 @@ const Products = () => {
 
   const fetchData = async () => {
     try {
-      startLoading('Chargement des produits...')
-      updateProgress(20, 'Récupération des données...')
+      setLoadingMessage('Récupération des données...')
+      setLoadingProgress(20)
       
       const { getAll } = await import('../utils/api')
       
-      updateProgress(40, 'Chargement des produits...')
+      setLoadingMessage('Chargement des produits...')
+      setLoadingProgress(40)
       const productsData = await getAll('products')
       
-      updateProgress(60, 'Chargement des catégories...')
+      setLoadingMessage('Chargement des catégories...')
+      setLoadingProgress(60)
       const categoriesData = await getAll('categories')
       
-      updateProgress(80, 'Chargement des fermes...')
+      setLoadingMessage('Chargement des fermes...')
+      setLoadingProgress(80)
       const farmsData = await getAll('farms')
       
-      updateProgress(90, 'Finalisation...')
+      setLoadingMessage('Finalisation...')
+      setLoadingProgress(90)
       setAllProducts(productsData)
       setProducts(productsData)
       setCategories(categoriesData)
       setFarms(farmsData)
       
-      updateProgress(100, 'Terminé!')
-      await new Promise(resolve => setTimeout(resolve, 300))
+      setLoadingMessage('Terminé!')
+      setLoadingProgress(100)
+      await new Promise(resolve => setTimeout(resolve, 500))
     } catch (error) {
       console.error('Erreur lors du chargement des produits:', error)
       setProducts([])
     } finally {
       setLoading(false)
-      stopLoading()
     }
   }
 
@@ -103,7 +108,7 @@ const Products = () => {
   }
 
   if (loading) {
-    return null // Le chargement global s'occupe de l'affichage
+    return <ProductLoading message={loadingMessage} progress={loadingProgress} />
   }
 
   return (
