@@ -145,14 +145,14 @@ const FarmModal = ({ farm, onClose, onSuccess }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4"
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto"
       onClick={onClose}
     >
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="border border-gray-700 rounded-2xl p-6 bg-black max-w-md w-full"
+        className="border border-gray-700 rounded-2xl p-6 bg-black max-w-md w-full my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-2xl font-bold text-white mb-6">

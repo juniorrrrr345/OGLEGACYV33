@@ -176,14 +176,14 @@ const CategoryModal = ({ category, onClose, onSuccess }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
       onClick={onClose}
     >
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="neon-border rounded-2xl p-8 bg-slate-900 max-w-md w-full"
+        className="neon-border rounded-2xl p-8 bg-slate-900 max-w-md w-full my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-3xl font-bold text-gradient mb-6">

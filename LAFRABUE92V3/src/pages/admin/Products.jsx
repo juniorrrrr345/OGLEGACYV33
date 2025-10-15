@@ -497,14 +497,14 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4"
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto"
       onClick={onClose}
     >
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="neon-border rounded-2xl p-4 sm:p-6 lg:p-8 bg-slate-900 max-w-2xl w-full max-h-[95vh] overflow-y-auto"
+        className="neon-border rounded-2xl p-4 sm:p-6 lg:p-8 bg-slate-900 max-w-2xl w-full my-auto max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gradient mb-4 sm:mb-6">
