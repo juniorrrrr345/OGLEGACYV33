@@ -303,14 +303,22 @@ function transformProduct(p) {
 }
 
 async function getProducts(env, corsHeaders) {
-  const { results } = await env.DB.prepare('SELECT * FROM products ORDER BY createdAt DESC').all()
-  
-  // Transformer les produits pour avoir toujours des variants
-  const products = results.map(transformProduct)
+  try {
+    const { results } = await env.DB.prepare('SELECT * FROM products ORDER BY created_at DESC').all()
+    
+    // Transformer les produits pour avoir toujours des variants
+    const products = results.map(transformProduct)
 
-  return new Response(JSON.stringify(products), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-  })
+    return new Response(JSON.stringify(products), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  } catch (error) {
+    console.error('Error fetching products:', error)
+    // Retourner un tableau vide en cas d'erreur de base de données
+    return new Response(JSON.stringify([]), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  }
 }
 
 async function getProduct(id, env, corsHeaders) {
@@ -329,56 +337,76 @@ async function getProduct(id, env, corsHeaders) {
 }
 
 async function createProduct(request, env, corsHeaders) {
-  const data = await request.json()
-  const id = data.id || Date.now().toString()
-  
-  await env.DB.prepare(`
-    INSERT OR REPLACE INTO products (id, name, description, category, farm, photo, video, medias, variants, price, createdAt, updatedAt)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).bind(
-    id,
-    data.name,
-    data.description,
-    data.category,
-    data.farm,
-    data.photo,
-    data.video,
-    JSON.stringify(data.medias || []),
-    JSON.stringify(data.variants || []),
-    data.price,
-    data.createdAt || new Date().toISOString(),
-    new Date().toISOString()
-  ).run()
+  try {
+    const data = await request.json()
+    const id = data.id || Date.now().toString()
+    
+    console.log('Creating product with data:', data)
+    
+    const result = await env.DB.prepare(`
+      INSERT OR REPLACE INTO products (id, name, description, category, farm, photo, video, medias, variants, price, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+      id,
+      data.name || '',
+      data.description || null,
+      data.category || null,
+      data.farm || null,
+      data.photo || null,
+      data.video || null,
+      JSON.stringify(data.medias || []),
+      JSON.stringify(data.variants || []),
+      data.price || null,
+      data.createdAt || new Date().toISOString(),
+      new Date().toISOString()
+    ).run()
 
-  return new Response(JSON.stringify({ success: true, id }), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-  })
+    console.log('Product created successfully:', result)
+
+    return new Response(JSON.stringify({ success: true, id }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  } catch (error) {
+    console.error('Error creating product:', error)
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  }
 }
 
 async function updateProduct(id, request, env, corsHeaders) {
-  const data = await request.json()
-  
-  await env.DB.prepare(`
-    INSERT OR REPLACE INTO products (id, name, description, category, farm, photo, video, medias, variants, price, createdAt, updatedAt)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).bind(
-    id,
-    data.name,
-    data.description,
-    data.category,
-    data.farm,
-    data.photo,
-    data.video,
-    JSON.stringify(data.medias || []),
-    JSON.stringify(data.variants || []),
-    data.price,
-    data.createdAt || new Date().toISOString(),
-    new Date().toISOString()
-  ).run()
+  try {
+    const data = await request.json()
+    
+    const result = await env.DB.prepare(`
+      INSERT OR REPLACE INTO products (id, name, description, category, farm, photo, video, medias, variants, price, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+      id,
+      data.name || '',
+      data.description || null,
+      data.category || null,
+      data.farm || null,
+      data.photo || null,
+      data.video || null,
+      JSON.stringify(data.medias || []),
+      JSON.stringify(data.variants || []),
+      data.price || null,
+      data.createdAt || new Date().toISOString(),
+      new Date().toISOString()
+    ).run()
 
-  return new Response(JSON.stringify({ success: true }), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-  })
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  } catch (error) {
+    console.error('Error updating product:', error)
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  }
 }
 
 async function deleteProduct(id, env, corsHeaders) {
@@ -592,17 +620,29 @@ async function getFarms(env, corsHeaders) {
 }
 
 async function createFarm(request, env, corsHeaders) {
-  const data = await request.json()
-  const id = data.id || Date.now().toString()
-  
-  await env.DB.prepare(`
-    INSERT OR REPLACE INTO farms (id, name, image, description)
-    VALUES (?, ?, ?, ?)
-  `).bind(id, data.name, data.image || null, data.description || null).run()
+  try {
+    const data = await request.json()
+    const id = data.id || Date.now().toString()
+    
+    console.log('Creating farm with data:', data)
+    
+    const result = await env.DB.prepare(`
+      INSERT OR REPLACE INTO farms (id, name, image, description)
+      VALUES (?, ?, ?, ?)
+    `).bind(id, data.name, data.image || null, data.description || null).run()
 
-  return new Response(JSON.stringify({ success: true, id }), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-  })
+    console.log('Farm created successfully:', result)
+
+    return new Response(JSON.stringify({ success: true, id }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  } catch (error) {
+    console.error('Error creating farm:', error)
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  }
 }
 
 async function updateFarm(id, request, env, corsHeaders) {
