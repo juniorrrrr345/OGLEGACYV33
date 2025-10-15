@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { getAll, save } from '../../utils/api'
+import { getAll, getById, save } from '../../utils/api'
 
 const AdminOrderSettings = () => {
   const [settings, setSettings] = useState({
@@ -16,9 +16,8 @@ const AdminOrderSettings = () => {
 
   const loadSettings = async () => {
     try {
-      const data = await getAll('settings')
-      // Chercher l'entrée orderSettings
-      const orderData = data.find(s => s.key === 'orderSettings')
+      // Utiliser getById pour récupérer directement les paramètres de commande
+      const orderData = await getById('settings', 'orderSettings')
       if (orderData) {
         setSettings({
           orderLink: orderData.orderLink || '',
