@@ -145,16 +145,17 @@ const FarmModal = ({ farm, onClose, onSuccess }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto"
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 overflow-y-auto"
       onClick={onClose}
     >
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        className="border border-gray-700 rounded-2xl p-6 bg-black max-w-md w-full my-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="min-h-screen px-2 sm:px-4 py-8 flex items-center justify-center">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+          className="border border-gray-700 rounded-2xl p-6 bg-black max-w-md w-full"
+          onClick={(e) => e.stopPropagation()}
+        >
         <h2 className="text-2xl font-bold text-white mb-6">
           {farm ? '✏️ Modifier la farm' : '➕ Ajouter une farm'}
         </h2>
@@ -189,7 +190,8 @@ const FarmModal = ({ farm, onClose, onSuccess }) => {
             </button>
           </div>
         </form>
-      </motion.div>
+        </motion.div>
+      </div>
     </motion.div>
   )
 }
