@@ -51,16 +51,16 @@ const SocialModal = ({ social, onClose, onSuccess }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black z-[9999] overflow-y-auto"
+      className="fixed inset-0 bg-black z-[9999] flex items-start justify-center overflow-y-auto"
       onClick={onClose}
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}
     >
-      <div className="min-h-screen px-4 py-8 flex items-center justify-center">
+      <div className="w-full px-4 py-8">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="neon-border rounded-2xl p-6 sm:p-8 bg-slate-900 max-w-md w-full relative"
+          className="neon-border rounded-2xl p-6 sm:p-8 bg-slate-900 max-w-md w-full mx-auto"
           onClick={(e) => e.stopPropagation()}
           style={{ backgroundColor: '#0f172a' }}
         >
