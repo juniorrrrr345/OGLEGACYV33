@@ -362,33 +362,36 @@ Password : VotreMotDePasse123
 
 ### 9.2 Configurer les Paramètres
 
-**Admin → Paramètres → Général**
+**Admin → Configuration**
 - Nom de la boutique : `Mon Nouveau Shop`
 - Titre Hero : `Bienvenue sur Mon Nouveau Shop`
 - Sous-titre : `La meilleure sélection de produits`
+- Uploader une image de fond personnalisée
 
-**Admin → Paramètres → Socials**
-- WhatsApp : `https://wa.me/VOTRE-NUMERO`
-- Instagram : `https://instagram.com/VOTRE-COMPTE`
-- Telegram : `https://t.me/VOTRE-COMPTE`
+**Admin → Réseaux Sociaux**
+- Ajoutez vos réseaux : WhatsApp, Instagram, Telegram, etc.
+- Exemple WhatsApp : `https://wa.me/33123456789`
+- Exemple Telegram : `https://t.me/username`
 
-**Admin → Paramètres → Commandes**
-- Lien de commande : `https://wa.me/VOTRE-NUMERO`
+**Admin → Commande**
+- Lien de commande : `https://wa.me/33123456789`
+- Texte du bouton : `Commander maintenant`
 
-### 8.3 Ajouter des Catégories
+### 9.3 Ajouter des Catégories
 
 **Admin → Catégories → Ajouter**
-- Créez vos catégories personnalisées
+- Créez vos catégories avec icônes 🏷️ ou images uploadées
 
-### 8.4 Ajouter des Farms
+### 9.4 Ajouter des Farms  
 
 **Admin → Farms → Ajouter**
-- Créez vos farms personnalisées
+- Créez vos farms (sources/fournisseurs)
 
-### 8.5 Ajouter des Produits
+### 9.5 Ajouter des Produits
 
 **Admin → Produits → Ajouter**
-- Ajoutez vos produits avec photos/vidéos
+- Ajoutez vos produits avec photos ET/OU vidéos
+- Configurez les variantes (ex: 5g - 20€, 10g - 35€)
 
 ---
 
