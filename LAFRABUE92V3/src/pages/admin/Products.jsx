@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { uploadToR2 } from '../../utils/cloudflare'
 import { getAll, save, remove } from '../../utils/api'
+import FarmSocialSlide from '../../components/FarmSocialSlide'
 
 // Import React pour useEffect dans ProductModal
 const { useEffect: useEffectInModal } = React
@@ -13,6 +14,8 @@ const AdminProducts = () => {
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
+  const [showFarmSocialSlide, setShowFarmSocialSlide] = useState(false)
+  const [pendingProductData, setPendingProductData] = useState(null)
 
   useEffect(() => {
     fetchProducts()
@@ -323,13 +326,39 @@ const AdminProducts = () => {
           <ProductModal
             product={editingProduct}
             onClose={() => setShowModal(false)}
-            onSuccess={() => {
+            onSuccess={(productData) => {
               setShowModal(false)
               fetchProducts()
+              
+              // Vérifier si c'est un produit de catégorie farm
+              if (productData && productData.category) {
+                const category = categories.find(c => String(c.id) === String(productData.category))
+                if (category && category.name && category.name.toLowerCase().includes('farm')) {
+                  setPendingProductData(productData)
+                  setShowFarmSocialSlide(true)
+                }
+              }
             }}
           />
         )}
       </AnimatePresence>
+
+      {/* Farm Social Slide */}
+      <FarmSocialSlide
+        isOpen={showFarmSocialSlide}
+        onClose={() => {
+          setShowFarmSocialSlide(false)
+          setPendingProductData(null)
+        }}
+        onConfirm={(shareData) => {
+          console.log('Données de partage:', shareData)
+          // Ici vous pouvez ajouter la logique pour partager sur les réseaux sociaux
+          alert(`Produit partagé sur ${shareData.socials.length} réseau(x) social(aux) !`)
+          setShowFarmSocialSlide(false)
+          setPendingProductData(null)
+        }}
+        productData={pendingProductData}
+      />
     </div>
   )
 }
@@ -484,7 +513,7 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
 
       await save('products', productData)
       setLoading(false)
-      onSuccess()
+      onSuccess(productData)
     } catch (error) {
       console.error('Error saving product:', error)
       alert('Erreur lors de la sauvegarde du produit')
