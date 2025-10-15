@@ -17,10 +17,12 @@ const AdminOrderSettings = () => {
   const loadSettings = async () => {
     try {
       const data = await getAll('settings')
-      if (data.orderLink || data.orderButtonText) {
+      // Chercher l'entrée orderSettings
+      const orderData = data.find(s => s.key === 'orderSettings')
+      if (orderData) {
         setSettings({
-          orderLink: data.orderLink || '',
-          orderButtonText: data.orderButtonText || 'Commander'
+          orderLink: orderData.orderLink || '',
+          orderButtonText: orderData.orderButtonText || 'Commander'
         })
       }
     } catch (error) {
@@ -35,19 +37,13 @@ const AdminOrderSettings = () => {
     setSaving(true)
 
     try {
-      // Sauvegarder directement via l'API
-      const response = await fetch('https://thegd33.calitek-junior.workers.dev/api/settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          orderLink: settings.orderLink,
-          orderButtonText: settings.orderButtonText
-        })
+      // Sauvegarder via l'API
+      await save('settings', {
+        key: 'orderSettings',
+        orderLink: settings.orderLink,
+        orderButtonText: settings.orderButtonText,
+        updatedAt: new Date().toISOString()
       })
-      
-      if (!response.ok) {
-        throw new Error('Erreur API')
-      }
       
       alert('✅ Paramètres de commande enregistrés avec succès !')
     } catch (error) {
