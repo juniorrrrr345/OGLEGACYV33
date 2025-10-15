@@ -63,11 +63,11 @@ const Hero = () => {
           className="mb-12 inline-block"
         >
           {/* Fond ovale identique aux autres pages */}
-          <div className="bg-black/90 backdrop-blur-xl rounded-full px-16 py-10 border-2 border-white/30 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-3 text-white">
+          <div className="bg-black/90 backdrop-blur-xl rounded-full px-8 sm:px-12 lg:px-16 py-6 sm:py-8 lg:py-10 border-2 border-white/30 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-2 sm:mb-3 text-white">
               {settings.heroTitle}
             </h1>
-            <p className="text-lg sm:text-xl font-light text-gray-300">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl font-light text-gray-300">
               {settings.heroSubtitle}
             </p>
           </div>
@@ -107,26 +107,26 @@ const MenuSection = ({ icon, title, content, isOpen, onClick }) => {
     >
       <div className="p-4" onClick={onClick}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            {isImageUrl ? (
-              <img 
-                src={icon} 
-                alt={title}
-                className="w-12 h-12 object-cover rounded flex-shrink-0"
-                onError={(e) => {
-                  console.log('Image failed to load:', icon)
-                  e.target.style.display = 'none'
-                }}
-              />
-            ) : (
-              <span className="text-3xl flex-shrink-0">{icon || '📦'}</span>
-            )}
-            <span className="text-lg font-medium text-white group-hover:text-gradient transition-all duration-300">
-              {title}
-            </span>
-          </div>
+        <div className="flex items-center space-x-2 sm:space-x-4">
+          {isImageUrl ? (
+            <img 
+              src={icon} 
+              alt={title}
+              className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 object-cover rounded flex-shrink-0"
+              onError={(e) => {
+                console.log('Image failed to load:', icon)
+                e.target.style.display = 'none'
+              }}
+            />
+          ) : (
+            <span className="text-2xl sm:text-3xl flex-shrink-0">{icon || '📦'}</span>
+          )}
+          <span className="text-sm sm:text-base lg:text-lg font-medium text-white group-hover:text-gradient transition-all duration-300">
+            {title}
+          </span>
+        </div>
           <motion.svg
-            className="w-5 h-5 text-gray-300 transition-transform duration-300"
+            className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300 transition-transform duration-300"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -146,8 +146,8 @@ const MenuSection = ({ icon, title, content, isOpen, onClick }) => {
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <div className="px-4 pb-4 pt-2">
-              <p className="text-gray-300 text-sm leading-relaxed border-t border-gray-700/20 pt-3 whitespace-pre-line">
+            <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-2">
+              <p className="text-gray-300 text-xs sm:text-sm leading-relaxed border-t border-gray-700/20 pt-2 sm:pt-3 whitespace-pre-line">
                 {content}
               </p>
             </div>

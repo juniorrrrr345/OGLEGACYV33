@@ -28,11 +28,14 @@ const ProductDetail = () => {
       
       // Charger les paramètres de commande
       const settings = await getAll('settings')
-      if (settings.orderLink) {
-        setOrderLink(settings.orderLink)
-      }
-      if (settings.orderButtonText) {
-        setOrderButtonText(settings.orderButtonText)
+      const orderSettings = settings.find(s => s.key === 'orderSettings')
+      if (orderSettings) {
+        if (orderSettings.orderLink) {
+          setOrderLink(orderSettings.orderLink)
+        }
+        if (orderSettings.orderButtonText) {
+          setOrderButtonText(orderSettings.orderButtonText)
+        }
       }
     }
     fetchProduct()
@@ -146,7 +149,7 @@ const ProductDetail = () => {
             <span className="text-white truncate">{product.name}</span>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-12">
             {/* Galerie Médias */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -154,7 +157,7 @@ const ProductDetail = () => {
               className="space-y-4"
             >
               {/* Média Principal */}
-              <div className="neon-border rounded-2xl overflow-hidden bg-slate-900/50 backdrop-blur-sm aspect-square">
+              <div className="neon-border rounded-2xl overflow-hidden bg-slate-900/50 backdrop-blur-sm aspect-square sm:aspect-square">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={selectedMedia}
@@ -203,7 +206,7 @@ const ProductDetail = () => {
 
               {/* Miniatures */}
               {Array.isArray(medias) && medias.length > 1 && (
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-4">
                   {medias.map((media, index) => (
                     <motion.div
                       key={index}
@@ -255,23 +258,23 @@ const ProductDetail = () => {
               className="space-y-6"
             >
               {/* Titre et Prix */}
-              <div className="bg-black/90 backdrop-blur-xl rounded-2xl px-6 py-6 border-2 border-white/30 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
-                <h1 className="text-4xl md:text-5xl font-bold text-white glow-effect mb-4">
+              <div className="bg-black/90 backdrop-blur-xl rounded-2xl px-4 sm:px-6 py-4 sm:py-6 border-2 border-white/30 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white glow-effect mb-2 sm:mb-4">
                   {product.name}
                 </h1>
-                <div className="flex items-baseline flex-wrap gap-3 mb-3">
-                  <span className="text-5xl font-bold text-white">
+                <div className="flex items-baseline flex-wrap gap-2 sm:gap-3 mb-2 sm:mb-3">
+                  <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
                     {currentVariant?.price || 'N/A'}
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1 sm:gap-2">
                   {categoryName && (
-                    <span className="px-3 py-1 bg-white/20 border border-white/50 rounded-full text-white text-sm">
+                    <span className="px-2 sm:px-3 py-1 bg-white/20 border border-white/50 rounded-full text-white text-xs sm:text-sm">
                       🏷️ {categoryName}
                     </span>
                   )}
                   {farmName && (
-                    <span className="px-3 py-1 bg-white/20 border border-white/50 rounded-full text-white text-sm">
+                    <span className="px-2 sm:px-3 py-1 bg-white/20 border border-white/50 rounded-full text-white text-xs sm:text-sm">
                       🌾 {farmName}
                     </span>
                   )}
@@ -279,16 +282,16 @@ const ProductDetail = () => {
               </div>
 
               {/* Description */}
-              <div className="neon-border rounded-xl p-4 sm:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30">
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-3">📝 Description</h3>
-                <p className="text-gray-300 leading-relaxed whitespace-pre-line text-sm sm:text-base">
+              <div className="neon-border rounded-xl p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30">
+                <h3 className="text-base sm:text-lg lg:text-xl font-bold text-white mb-2 sm:mb-3">📝 Description</h3>
+                <p className="text-gray-300 leading-relaxed whitespace-pre-line text-xs sm:text-sm lg:text-base">
                   {product.description}
                 </p>
               </div>
 
               {/* Variantes (Quantité + Prix) */}
-              <div className="neon-border rounded-xl p-4 sm:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30">
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-4">💰 Quantité & Prix</h3>
+              <div className="neon-border rounded-xl p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30">
+                <h3 className="text-base sm:text-lg lg:text-xl font-bold text-white mb-3 sm:mb-4">💰 Quantité & Prix</h3>
                 <div className="space-y-2 sm:space-y-3">
                   {Array.isArray(variants) && variants.map((variant, index) => (
                     <motion.button
@@ -296,30 +299,30 @@ const ProductDetail = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setSelectedVariant(index)}
-                      className={`w-full p-3 sm:p-4 rounded-lg border-2 transition-all flex items-center justify-between ${
+                      className={`w-full p-2 sm:p-3 lg:p-4 rounded-lg border-2 transition-all flex items-center justify-between ${
                         selectedVariant === index
                           ? 'border-white bg-white/10 text-white'
                           : 'border-gray-700/30 bg-slate-800/50 text-gray-300 hover:border-white/50'
                       }`}
                     >
-                      <div className="flex items-center space-x-2 sm:space-x-3">
-                        <span className="text-xl sm:text-2xl">{selectedVariant === index ? '✓' : '○'}</span>
+                      <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
+                        <span className="text-lg sm:text-xl lg:text-2xl">{selectedVariant === index ? '✓' : '○'}</span>
                         <div className="text-left">
-                          <div className="text-base sm:text-lg font-bold text-white">{variant.name}</div>
-                          <div className="text-xs sm:text-sm text-gray-400">Quantité disponible</div>
+                          <div className="text-sm sm:text-base lg:text-lg font-bold text-white">{variant.name}</div>
+                          <div className="text-xs sm:text-sm text-gray-400 hidden sm:block">Quantité disponible</div>
                         </div>
                       </div>
-                      <div className="text-xl sm:text-2xl font-bold text-white">{variant?.price || 'N/A'}</div>
+                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-white">{variant?.price || 'N/A'}</div>
                     </motion.button>
                   ))}
                 </div>
               </div>
 
               {/* Commande */}
-              <div className="neon-border rounded-xl p-4 sm:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30 space-y-4">
+              <div className="neon-border rounded-xl p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30 space-y-3 sm:space-y-4">
                 <button
                   onClick={handleCommand}
-                  className="w-full py-3 sm:py-4 bg-gradient-to-r from-white to-gray-200 rounded-lg text-black font-bold text-base sm:text-lg hover:from-gray-200 hover:to-gray-400 transition-all transform hover:scale-105 flex items-center justify-center space-x-2"
+                  className="w-full py-2 sm:py-3 lg:py-4 bg-gradient-to-r from-white to-gray-200 rounded-lg text-black font-bold text-sm sm:text-base lg:text-lg hover:from-gray-200 hover:to-gray-400 transition-all transform hover:scale-105 flex items-center justify-center space-x-1 sm:space-x-2"
                 >
                   <span>💬</span>
                   <span>{orderButtonText}</span>

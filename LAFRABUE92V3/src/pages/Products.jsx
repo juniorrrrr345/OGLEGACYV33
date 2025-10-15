@@ -208,7 +208,7 @@ const Products = () => {
               <p className="text-gray-400 text-xl">Aucun produit disponible pour le moment</p>
             </div>
           ) : (
-            <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
               {Array.isArray(products) && products.map((product, index) => (
                 <ProductCard 
                   key={product.id} 
@@ -289,7 +289,7 @@ const ProductCard = ({ product, index, onPreview, categories, farms }) => {
       className="neon-border rounded-2xl overflow-hidden bg-slate-900/50 backdrop-blur-sm group cursor-pointer"
     >
       {/* Image ou Vidéo */}
-      <div className="relative h-48 sm:h-64 md:h-72 overflow-hidden bg-slate-800" onClick={onPreview}>
+      <div className="relative h-32 sm:h-48 md:h-64 lg:h-72 overflow-hidden bg-slate-800" onClick={onPreview}>
         {displayImage ? (
           isCloudflareStreamIframe(displayImage) ? (
             <iframe
@@ -330,36 +330,36 @@ const ProductCard = ({ product, index, onPreview, categories, farms }) => {
       </div>
 
       {/* Info */}
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-theme-heading mb-2 group-hover:text-gradient transition-all">
+      <div className="p-3 sm:p-4 lg:p-6">
+        <h3 className="text-sm sm:text-base lg:text-xl font-bold text-theme-heading mb-1 sm:mb-2 group-hover:text-gradient transition-all line-clamp-2">
           {product.name}
         </h3>
-        <p className="text-theme-secondary text-sm mb-4 line-clamp-2">
+        <p className="text-theme-secondary text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2">
           {product.description}
         </p>
         
         {/* Catégorie et Farm */}
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-1 sm:gap-2 mb-2 sm:mb-4">
           {categoryName && (
-            <span className="px-2 py-1 bg-gray-700/30 border border-gray-600/50 rounded-full text-theme-secondary text-xs">
-              🏷️ {categoryName}
+            <span className="px-1 sm:px-2 py-0.5 sm:py-1 bg-gray-700/30 border border-gray-600/50 rounded-full text-theme-secondary text-xs">
+              🏷️ {categoryName.length > 8 ? categoryName.substring(0, 8) + '...' : categoryName}
             </span>
           )}
           {farmName && (
-            <span className="px-2 py-1 bg-gray-700/30 border border-gray-600/50 rounded-full text-theme-secondary text-xs">
-              🌾 {farmName}
+            <span className="px-1 sm:px-2 py-0.5 sm:py-1 bg-gray-700/30 border border-gray-600/50 rounded-full text-theme-secondary text-xs">
+              🌾 {farmName.length > 8 ? farmName.substring(0, 8) + '...' : farmName}
             </span>
           )}
         </div>
         
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-1 sm:gap-2">
           {product.variants && product.variants.length > 1 && (
-            <p className="text-sm text-theme-secondary">
-              {product.variants.length} options disponibles
+            <p className="text-xs sm:text-sm text-theme-secondary hidden sm:block">
+              {product.variants.length} options
             </p>
           )}
           <Link to={`/products/${product.id}`} className="ml-auto">
-            <button className="px-4 py-2 bg-gradient-to-r from-white to-gray-200 rounded-lg text-black font-semibold hover:from-gray-200 hover:to-gray-400 transition-all">
+            <button className="px-2 sm:px-3 lg:px-4 py-1 sm:py-2 bg-gradient-to-r from-white to-gray-200 rounded-lg text-black font-semibold hover:from-gray-200 hover:to-gray-400 transition-all text-xs sm:text-sm">
               Voir
             </button>
           </Link>

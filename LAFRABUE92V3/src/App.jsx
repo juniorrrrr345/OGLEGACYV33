@@ -29,13 +29,18 @@ function App() {
         const { getById } = await import('./utils/api')
         const settings = await getById('settings', 'general')
         if (settings && settings.shopName) {
-          document.title = `${settings.shopName} - Boutique`
+          document.title = settings.shopName
+        } else {
+          // Titre par défaut si pas de nom configuré
+          document.title = 'Boutique'
         }
       } catch (error) {
         console.error('Error loading shop name:', error)
+        document.title = 'Boutique'
       }
     }
-    setTimeout(updateTitle, 1000)
+    // Charger immédiatement sans délai
+    updateTitle()
   }, [])
 
   // Police par défaut
