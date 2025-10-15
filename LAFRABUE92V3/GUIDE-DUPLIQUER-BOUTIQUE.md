@@ -301,9 +301,57 @@ Ouvrez l'URL Vercel (ex: `https://boutique-shop-2.vercel.app`)
 
 ---
 
-## 📋 ÉTAPE 8 : PERSONNALISER LA NOUVELLE BOUTIQUE
+## 📋 ÉTAPE 8 : APPLIQUER LES CORRECTIONS IMPORTANTES
 
-### 8.1 Se Connecter à l'Admin
+### ⚠️ CORRECTIONS OBLIGATOIRES À FAIRE APRÈS DUPLICATION
+
+Après avoir dupliqué la boutique, vous DEVEZ appliquer ces corrections pour éviter les bugs :
+
+#### 8.1 Corriger les Modaux (Questionnaires) - CRITIQUE !
+
+**Problème** : Les formulaires d'ajout (produits, catégories, farms, réseaux sociaux) s'affichent mal et sont coupés.
+
+**Fichiers à modifier** : 
+- `src/pages/admin/Products.jsx`
+- `src/pages/admin/Categories.jsx`
+- `src/pages/admin/Farms.jsx`
+- `src/pages/admin/Socials.jsx`
+
+**Dans CHAQUE fichier**, cherchez la fonction du modal et appliquez ces 2 changements :
+
+**CHANGEMENT 1** - Au début du modal, REMPLACER :
+```jsx
+<motion.div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <motion.div className="neon-border rounded-2xl p-8 bg-slate-900 max-w-md w-full">
+```
+
+**PAR** :
+```jsx
+<motion.div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[9999] overflow-y-auto">
+  <div className="min-h-screen px-4 py-8 flex items-center justify-center">
+    <motion.div className="neon-border rounded-2xl p-8 bg-slate-900 max-w-md w-full">
+```
+
+**CHANGEMENT 2** - À la fin du modal, REMPLACER :
+```jsx
+    </motion.div>
+  </motion.div>
+```
+
+**PAR** :
+```jsx
+    </motion.div>
+  </div>
+</motion.div>
+```
+
+✅ **Résultat** : Les questionnaires seront parfaitement centrés et visibles sur tous les écrans !
+
+---
+
+## 📋 ÉTAPE 9 : PERSONNALISER LA NOUVELLE BOUTIQUE
+
+### 9.1 Se Connecter à l'Admin
 
 ```
 https://boutique-shop-2.vercel.app/admin/login
@@ -312,7 +360,7 @@ Username : admin
 Password : VotreMotDePasse123
 ```
 
-### 8.2 Configurer les Paramètres
+### 9.2 Configurer les Paramètres
 
 **Admin → Paramètres → Général**
 - Nom de la boutique : `Mon Nouveau Shop`
