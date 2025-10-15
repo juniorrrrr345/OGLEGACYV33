@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE TABLE IF NOT EXISTS farms (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
+    image TEXT,
     description TEXT,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
