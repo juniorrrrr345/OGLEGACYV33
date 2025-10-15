@@ -53,25 +53,25 @@ const AdminFarms = () => {
   }
 
   return (
-    <div>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+    <div className="w-full">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gradient glow-effect mb-2">
+          <h1 className="text-3xl lg:text-4xl font-bold text-gradient glow-effect mb-2">
             Gestion des Farms
           </h1>
-          <p className="text-gray-400 text-sm sm:text-base">{farms.length} farm(s) au total</p>
+          <p className="text-gray-400">{farms.length} farm(s) au total</p>
         </div>
         <button
           onClick={handleAdd}
-          className="w-full sm:w-auto px-4 sm:px-6 py-3 bg-gradient-to-r from-white to-gray-200 rounded-lg text-black font-semibold hover:from-gray-200 hover:to-gray-400 transition-all flex items-center justify-center space-x-2"
+          className="w-full lg:w-auto px-6 py-3 bg-gradient-to-r from-white to-gray-200 rounded-lg text-black font-semibold hover:from-gray-200 hover:to-gray-400 transition-all flex items-center justify-center space-x-2"
         >
           <span>➕</span>
-          <span className="whitespace-nowrap">Ajouter une farm</span>
+          <span>Ajouter une farm</span>
         </button>
       </div>
 
       {/* Farms Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
         {farms.map((farm) => (
           <motion.div
             key={farm.id}
@@ -145,18 +145,16 @@ const FarmModal = ({ farm, onClose, onSuccess }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black z-[9999] flex items-start justify-center overflow-y-auto"
+      className="fixed inset-0 z-[9999] flex items-start justify-center pt-20 p-4"
       onClick={onClose}
-      style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}
     >
-      <div className="w-full px-2 sm:px-4 py-8">
+      <div className="w-full max-w-sm mx-auto">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="border border-gray-700 rounded-2xl p-6 bg-black max-w-md w-full mx-auto"
+          className="neon-border rounded-2xl p-6 bg-slate-900 w-full"
           onClick={(e) => e.stopPropagation()}
-          style={{ backgroundColor: '#000000' }}
         >
         <h2 className="text-2xl font-bold text-white mb-6">
           {farm ? '✏️ Modifier la farm' : '➕ Ajouter une farm'}

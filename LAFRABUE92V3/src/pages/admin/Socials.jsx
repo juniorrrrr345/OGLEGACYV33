@@ -51,18 +51,16 @@ const SocialModal = ({ social, onClose, onSuccess }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black z-[9999] flex items-start justify-center overflow-y-auto"
+      className="fixed inset-0 z-[9999] flex items-start justify-center pt-20 p-4"
       onClick={onClose}
-      style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}
     >
-      <div className="w-full px-4 py-8">
+      <div className="w-full max-w-md mx-auto">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="neon-border rounded-2xl p-6 sm:p-8 bg-slate-900 max-w-md w-full mx-auto"
+          className="neon-border rounded-2xl p-6 sm:p-8 bg-slate-900 w-full"
           onClick={(e) => e.stopPropagation()}
-          style={{ backgroundColor: '#0f172a' }}
         >
         <h2 className="text-2xl sm:text-3xl font-bold text-gradient mb-4 sm:mb-6">
           {social ? 'Modifier le réseau social' : 'Ajouter un réseau social'}
