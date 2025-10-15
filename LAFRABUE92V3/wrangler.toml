@@ -1,0 +1,12 @@
+name = "lafrabue92v3"
+main = "worker/index.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "LAFRABRIQUE92"
+database_id = "973d1959-3479-48eb-9be3-87f4cb2f18b2"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "lafrabrique92-media"
