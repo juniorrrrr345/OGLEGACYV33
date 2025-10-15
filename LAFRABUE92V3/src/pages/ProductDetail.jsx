@@ -28,7 +28,7 @@ const ProductDetail = () => {
       
       // Charger les paramètres de commande
       const settings = await getAll('settings')
-      const orderSettings = settings.find(s => s.key === 'orderSettings')
+      const orderSettings = settings.orderSettings
       if (orderSettings) {
         if (orderSettings.orderLink) {
           setOrderLink(orderSettings.orderLink)
