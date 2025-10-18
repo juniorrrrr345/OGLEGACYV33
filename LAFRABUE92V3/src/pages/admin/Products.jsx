@@ -521,7 +521,7 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[9999] flex items-start justify-center pt-20 p-4"
+      className="fixed inset-0 z-[9999] flex items-start justify-center pt-16 sm:pt-20 p-2 sm:p-4"
       onClick={onClose}
     >
       <div className="w-full max-w-2xl mx-auto">
@@ -529,14 +529,20 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="neon-border rounded-2xl p-6 lg:p-8 bg-slate-900 w-full"
+          className="neon-border rounded-2xl bg-slate-900 w-full max-h-[90vh] sm:max-h-[95vh] flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gradient mb-4 sm:mb-6">
-          {product ? 'Modifier le produit' : 'Ajouter un produit'}
-        </h2>
+          {/* Header fixe */}
+          <div className="p-4 sm:p-6 lg:p-8 border-b border-gray-700/30 flex-shrink-0">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gradient">
+              {product ? 'Modifier le produit' : 'Ajouter un produit'}
+            </h2>
+          </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Contenu scrollable */}
+          <div className="flex-1 overflow-y-auto overflow-x-hidden mobile-scroll-container">
+            <div className="p-4 sm:p-6 lg:p-8">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Informations de base */}
           <div>
             <label className="block text-gray-300 mb-2">Nom du produit</label>
@@ -545,7 +551,7 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="w-full px-4 py-3 bg-slate-800 border border-gray-700/30 rounded-lg text-white focus:outline-none focus:border-white transition-colors"
+              className="w-full px-4 py-3 bg-slate-800 border border-gray-700/30 rounded-lg text-white focus:outline-none focus:border-white transition-colors text-base sm:text-sm"
             />
           </div>
 
@@ -556,7 +562,7 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
               rows="3"
-              className="w-full px-4 py-3 bg-slate-800 border border-gray-700/30 rounded-lg text-white focus:outline-none focus:border-white transition-colors resize-none"
+              className="w-full px-4 py-3 bg-slate-800 border border-gray-700/30 rounded-lg text-white focus:outline-none focus:border-white transition-colors resize-none text-base sm:text-sm"
             ></textarea>
           </div>
 
@@ -566,7 +572,7 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               required
-              className="w-full px-4 py-3 bg-slate-800 border border-gray-700/30 rounded-lg text-white focus:outline-none focus:border-white transition-colors"
+              className="w-full px-4 py-3 bg-slate-800 border border-gray-700/30 rounded-lg text-white focus:outline-none focus:border-white transition-colors text-base sm:text-sm"
             >
               <option value="">Sélectionner une catégorie</option>
               {categories.map((cat) => (
@@ -582,7 +588,7 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
             <select
               value={formData.farm}
               onChange={(e) => setFormData({ ...formData, farm: e.target.value })}
-              className="w-full px-4 py-3 bg-slate-800 border border-gray-700/30 rounded-lg text-white focus:outline-none focus:border-white transition-colors"
+              className="w-full px-4 py-3 bg-slate-800 border border-gray-700/30 rounded-lg text-white focus:outline-none focus:border-white transition-colors text-base sm:text-sm"
             >
               <option value="">Aucune farm</option>
               {farms.map((farm) => (
@@ -629,7 +635,7 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
                 handlePhotoUpload(e.target.files[0])
                 e.target.value = '' // Réinitialiser le champ
               }}
-              className="w-full px-4 py-2 bg-slate-800 border border-gray-700/30 rounded-lg text-white text-sm focus:outline-none focus:border-white file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:bg-gray-700 file:text-white file:text-xs file:cursor-pointer"
+              className="w-full px-4 py-2 bg-slate-800 border border-gray-700/30 rounded-lg text-white text-sm focus:outline-none focus:border-white file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:bg-gray-700 file:text-white file:text-xs file:cursor-pointer mobile-file-input"
             />
           </div>
 
@@ -670,7 +676,7 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
                 handleVideoUpload(e.target.files[0])
                 e.target.value = '' // Réinitialiser le champ
               }}
-              className="w-full px-4 py-2 bg-slate-800 border border-gray-700/30 rounded-lg text-white text-sm focus:outline-none focus:border-white file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:bg-gray-700 file:text-white file:text-xs file:cursor-pointer"
+              className="w-full px-4 py-2 bg-slate-800 border border-gray-700/30 rounded-lg text-white text-sm focus:outline-none focus:border-white file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:bg-gray-700 file:text-white file:text-xs file:cursor-pointer mobile-file-input"
             />
           </div>
 
@@ -687,56 +693,65 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
               </button>
             </div>
 
-            <div className="space-y-3">
+            {/* Conteneur scrollable pour les variantes sur mobile */}
+            <div className="space-y-3 max-h-60 sm:max-h-none overflow-y-auto overflow-x-hidden mobile-scroll-container relative">
+              {/* Indicateur de scroll sur mobile */}
+              <div className="sm:hidden absolute top-0 right-0 w-6 h-6 bg-gradient-to-l from-slate-900 to-transparent pointer-events-none z-10"></div>
               {variants.map((variant, index) => (
-                <div key={index} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-slate-800/50 p-3 rounded-lg">
-                  <input
-                    type="text"
-                    placeholder="5g"
-                    value={variant.name}
-                    onChange={(e) => updateVariant(index, 'name', e.target.value)}
-                    className="w-full sm:flex-1 px-3 py-2 bg-slate-800 border border-gray-700/30 rounded text-white focus:outline-none focus:border-white"
-                    required
-                  />
-                  <input
-                    type="text"
-                    placeholder="20€"
-                    value={variant.price}
-                    onChange={(e) => updateVariant(index, 'price', e.target.value)}
-                    className="w-full sm:flex-1 px-3 py-2 bg-slate-800 border border-gray-700/30 rounded text-white focus:outline-none focus:border-white"
-                    required
-                  />
+                <div key={index} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-slate-800/50 p-3 rounded-lg min-w-0 mobile-variant-item">
+                  <div className="flex flex-col sm:flex-row gap-2 w-full min-w-0">
+                    <input
+                      type="text"
+                      placeholder="5g"
+                      value={variant.name}
+                      onChange={(e) => updateVariant(index, 'name', e.target.value)}
+                      className="w-full sm:flex-1 px-3 py-2 bg-slate-800 border border-gray-700/30 rounded text-white focus:outline-none focus:border-white min-w-0"
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="20€"
+                      value={variant.price}
+                      onChange={(e) => updateVariant(index, 'price', e.target.value)}
+                      className="w-full sm:flex-1 px-3 py-2 bg-slate-800 border border-gray-700/30 rounded text-white focus:outline-none focus:border-white min-w-0"
+                      required
+                    />
+                  </div>
                   {variants.length > 1 && (
                     <button
                       type="button"
                       onClick={() => removeVariant(index)}
-                      className="w-full sm:w-auto px-3 py-2 bg-gray-800/20 text-gray-400 rounded hover:bg-gray-700/30 flex items-center justify-center"
+                      className="w-full sm:w-auto px-3 py-2 bg-gray-800/20 text-gray-400 rounded hover:bg-gray-700/30 flex items-center justify-center flex-shrink-0 mt-2 sm:mt-0"
                     >
                       🗑️
                     </button>
                   )}
                 </div>
               ))}
+              {/* Indicateur de scroll en bas sur mobile */}
+              <div className="sm:hidden absolute bottom-0 right-0 w-6 h-6 bg-gradient-to-t from-slate-900 to-transparent pointer-events-none z-10"></div>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:space-x-4">
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 py-3 bg-gradient-to-r from-white to-gray-200 rounded-lg text-black font-semibold hover:from-gray-200 hover:to-gray-400 transition-all disabled:opacity-50"
-            >
-              {loading ? 'Enregistrement...' : 'Enregistrer'}
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 py-3 bg-gray-700 rounded-lg text-white font-semibold hover:bg-gray-600 transition-colors"
-            >
-              Annuler
-            </button>
+                <div className="flex flex-col sm:flex-row gap-3 sm:space-x-4">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="flex-1 py-3 bg-gradient-to-r from-white to-gray-200 rounded-lg text-black font-semibold hover:from-gray-200 hover:to-gray-400 transition-all disabled:opacity-50"
+                  >
+                    {loading ? 'Enregistrement...' : 'Enregistrer'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="flex-1 py-3 bg-gray-700 rounded-lg text-white font-semibold hover:bg-gray-600 transition-colors"
+                  >
+                    Annuler
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </form>
         </motion.div>
       </div>
     </motion.div>

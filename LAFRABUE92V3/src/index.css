@@ -209,3 +209,84 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555555;
 }
+
+/* Scrollbar mobile optimisée */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #555555;
+    border-radius: 3px;
+  }
+  
+  /* Barre de défilement horizontale pour les variantes */
+  .mobile-scroll-horizontal {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #555555 #000000;
+  }
+  
+  .mobile-scroll-horizontal::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .mobile-scroll-horizontal::-webkit-scrollbar-track {
+    background: #000000;
+  }
+  
+  .mobile-scroll-horizontal::-webkit-scrollbar-thumb {
+    background: #555555;
+    border-radius: 3px;
+  }
+  
+  /* Amélioration de la navigation tactile */
+  .mobile-scroll-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  /* Amélioration des inputs de fichiers sur mobile */
+  .mobile-file-input {
+    font-size: 16px; /* Évite le zoom automatique sur iOS */
+  }
+  
+  .mobile-file-input::-webkit-file-upload-button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+  
+  /* Amélioration des boutons sur mobile */
+  button, input[type="submit"], input[type="button"] {
+    min-height: 44px; /* Taille minimale recommandée pour les zones tactiles */
+  }
+  
+  /* Amélioration des champs de saisie sur mobile */
+  input, textarea, select {
+    font-size: 16px; /* Évite le zoom automatique sur iOS */
+    min-height: 44px;
+  }
+  
+  /* Amélioration des éléments de variantes sur mobile */
+  .mobile-variant-item {
+    margin-bottom: 12px;
+    padding: 12px;
+  }
+  
+  .mobile-variant-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Amélioration de l'espacement des boutons sur mobile */
+  .mobile-variant-item button {
+    margin-top: 8px;
+  }
+  
+  @media (min-width: 640px) {
+    .mobile-variant-item button {
+      margin-top: 0;
+    }
+  }
+}
