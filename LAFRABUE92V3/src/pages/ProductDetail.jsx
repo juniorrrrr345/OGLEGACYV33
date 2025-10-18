@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Footer from '../components/Footer'
+import PricingSelector from '../components/PricingSelector'
 
 const ProductDetail = () => {
   const { id } = useParams()
   const [product, setProduct] = useState(null)
   const [categories, setCategories] = useState([])
   const [farms, setFarms] = useState([])
-  const [selectedVariant, setSelectedVariant] = useState(0)
   const [selectedMedia, setSelectedMedia] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [orderLink, setOrderLink] = useState('#')
   const [orderButtonText, setOrderButtonText] = useState('Commander')
+  const [selectedQuantity, setSelectedQuantity] = useState('5g')
+  const [selectedDelivery, setSelectedDelivery] = useState('meetup')
+  const [currentPrice, setCurrentPrice] = useState(40)
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -45,8 +48,7 @@ const ProductDetail = () => {
     return (
       <div className="min-h-screen cosmic-bg flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white text-lg">Chargement...</p>
+          <p className="text-white text-lg">Produit non trouvé</p>
         </div>
       </div>
     )
@@ -92,22 +94,11 @@ const ProductDetail = () => {
     return url.includes('cloudflarestream.com') && url.includes('iframe')
   }
   
-  // Convertir prices en variants si nécessaire
-  let variants = product.variants || [];
-  
-  // Si pas de variants, essayer de convertir depuis prices
-  if (!Array.isArray(variants) || variants.length === 0) {
-    if (product.prices && typeof product.prices === 'object') {
-      variants = Object.entries(product.prices).map(([name, price]) => ({
-        name,
-        price: typeof price === 'number' ? `${price}€` : price.toString()
-      }));
-    } else if (product.price) {
-      variants = [{ name: 'Standard', price: product.price }];
-    }
+  const handlePricingSelection = (quantity, delivery, price) => {
+    setSelectedQuantity(quantity)
+    setSelectedDelivery(delivery)
+    setCurrentPrice(price)
   }
-
-  const currentVariant = variants[selectedVariant] || variants[0] || { name: 'Standard', price: product.price || 'N/A' }
   const currentMedia = medias[selectedMedia]
   
   // Trouver les noms de catégorie et farm (convertir en string pour la comparaison)
@@ -120,7 +111,8 @@ const ProductDetail = () => {
       return
     }
     
-    const message = `Bonjour, je voudrais commander:\n\n${product.name}\n${currentVariant?.name || 'Standard'} - ${currentVariant?.price || 'N/A'}`
+    const deliveryText = selectedDelivery === 'meetup' ? 'Meet up' : 'Livraison'
+    const message = `Bonjour, je voudrais commander:\n\n${product.name}\n${selectedQuantity} - ${deliveryText} - ${currentPrice}€`
     
     // Si c'est un lien WhatsApp, ajouter le message
     if (orderLink.includes('wa.me') || orderLink.includes('whatsapp')) {
@@ -134,7 +126,7 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen cosmic-bg">
-      <div className="pt-20 pb-32 px-4">
+      <div className="pt-20 pb-24 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumb */}
           <motion.div
@@ -264,7 +256,10 @@ const ProductDetail = () => {
                 </h1>
                 <div className="flex items-baseline flex-wrap gap-2 sm:gap-3 mb-2 sm:mb-3">
                   <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-                    {currentVariant?.price || 'N/A'}
+                    {currentPrice}€
+                  </span>
+                  <span className="text-lg text-gray-300">
+                    ({selectedQuantity} - {selectedDelivery === 'meetup' ? 'Meet up' : 'Livraison'})
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-1 sm:gap-2">
@@ -289,33 +284,12 @@ const ProductDetail = () => {
                 </p>
               </div>
 
-              {/* Variantes (Quantité + Prix) */}
+              {/* Sélecteur de prix */}
               <div className="neon-border rounded-xl p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30">
-                <h3 className="text-base sm:text-lg lg:text-xl font-bold text-white mb-3 sm:mb-4">💰 Quantité & Prix</h3>
-                <div className="space-y-2 sm:space-y-3">
-                  {Array.isArray(variants) && variants.map((variant, index) => (
-                    <motion.button
-                      key={index}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => setSelectedVariant(index)}
-                      className={`w-full p-2 sm:p-3 lg:p-4 rounded-lg border-2 transition-all flex items-center justify-between ${
-                        selectedVariant === index
-                          ? 'border-white bg-white/10 text-white'
-                          : 'border-gray-700/30 bg-slate-800/50 text-gray-300 hover:border-white/50'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
-                        <span className="text-lg sm:text-xl lg:text-2xl">{selectedVariant === index ? '✓' : '○'}</span>
-                        <div className="text-left">
-                          <div className="text-sm sm:text-base lg:text-lg font-bold text-white">{variant.name}</div>
-                          <div className="text-xs sm:text-sm text-gray-400 hidden sm:block">Quantité disponible</div>
-                        </div>
-                      </div>
-                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-white">{variant?.price || 'N/A'}</div>
-                    </motion.button>
-                  ))}
-                </div>
+                <PricingSelector 
+                  onSelectionChange={handlePricingSelection} 
+                  productVariants={product.variants || []}
+                />
               </div>
 
               {/* Commande */}

@@ -64,59 +64,24 @@ const AdminProducts = () => {
 
   // Fonction pour extraire le prix d'affichage depuis variants ou prices
   const getDisplayPrice = (product) => {
-    // Debug : ACTIVER pour voir ce qui arrive de l'API
-    console.log('🔍 Product pricing data:', {
-      name: product.name,
-      price: product.price,
-      prices: product.prices,
-      variants: product.variants,
-      fullProduct: product
-    })
-    
-    // 1. Essayer variants
+    // 1. Essayer variants avec meetup/livraison
     if (product.variants && Array.isArray(product.variants) && product.variants.length > 0) {
-      const firstPrice = product.variants[0].price
-      if (firstPrice && firstPrice !== '0' && firstPrice !== 0 && firstPrice !== 'N/A') {
-        console.log('✅ Prix trouvé dans variants:', firstPrice)
-        return firstPrice
+      const firstVariant = product.variants[0]
+      if (firstVariant.meetupPrice && firstVariant.livraisonPrice) {
+        return `${firstVariant.meetupPrice}€ / ${firstVariant.livraisonPrice}€`
+      }
+      // Fallback pour l'ancien format
+      if (firstVariant.price) {
+        return firstVariant.price
       }
     }
     
-    // 2. Essayer prices (peut être string JSON ou objet)
-    try {
-      let pricesObj = product.prices
-      
-      console.log('🔍 prices brut:', pricesObj, 'type:', typeof pricesObj)
-      
-      // Si c'est une string, parser
-      if (typeof pricesObj === 'string' && pricesObj !== '') {
-        pricesObj = JSON.parse(pricesObj)
-        console.log('📦 prices parsé:', pricesObj)
-      }
-      
-      // Si on a un objet avec des prix
-      if (pricesObj && typeof pricesObj === 'object' && !Array.isArray(pricesObj)) {
-        const entries = Object.entries(pricesObj)
-        if (entries.length > 0) {
-          const [name, price] = entries[0]
-          const displayPrice = typeof price === 'number' ? `${price}€` : String(price)
-          console.log('✅ Prix trouvé dans prices:', displayPrice)
-          return displayPrice
-        }
-      }
-    } catch (e) {
-      console.error('❌ Error parsing prices:', e, product.prices)
-    }
-    
-    // 3. Essayer le champ price simple
+    // 2. Essayer le champ price simple
     if (product.price && product.price !== 0 && product.price !== '0' && product.price !== 'N/A') {
-      console.log('✅ Prix trouvé dans price:', product.price)
       return product.price
     }
     
-    console.warn('⚠️ Aucun prix trouvé pour:', product.name)
-    
-    // 4. Fallback : afficher "Voir détails"
+    // 3. Fallback : afficher "Voir détails"
     return 'Voir détails'
   }
 
@@ -370,11 +335,13 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
   const [variants, setVariants] = useState(
     product?.variants || 
     (product ? [{
-      name: 'Standard',
-      price: product.price || ''
+      name: '5g',
+      meetupPrice: '40',
+      livraisonPrice: '50'
     }] : [{
-      name: '',
-      price: ''
+      name: '5g',
+      meetupPrice: '40',
+      livraisonPrice: '50'
     }])
   )
   const [categories, setCategories] = useState([])
@@ -456,7 +423,7 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
   }
 
   const addVariant = () => {
-    setVariants([...variants, { name: '', price: '' }])
+    setVariants([...variants, { name: '', meetupPrice: '', livraisonPrice: '' }])
   }
 
   const removeVariant = (index) => {
@@ -477,9 +444,9 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
 
     try {
       // Valider les variantes
-      const validVariants = variants.filter(v => v.name && v.price)
+      const validVariants = variants.filter(v => v.name && v.meetupPrice && v.livraisonPrice)
       if (validVariants.length === 0) {
-        alert('Veuillez ajouter au moins une variante valide')
+        alert('Veuillez ajouter au moins une variante valide avec prix meetup et livraison')
         setLoading(false)
         return
       }
@@ -501,7 +468,7 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
         variants: validVariants,
         // Pour la compatibilité avec l'ancien système
         image: video || photo || null,
-        price: validVariants[0].price,
+        price: validVariants[0].meetupPrice,
         createdAt: product?.createdAt || new Date().toISOString(),
         updatedAt: new Date().toISOString()
       }
@@ -683,7 +650,7 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
           {/* Variantes */}
           <div className="border border-gray-700/30 rounded-lg p-4">
             <div className="flex items-center justify-between mb-3">
-              <label className="block text-white font-semibold">💰 Variantes (Quantité + Prix)</label>
+              <label className="block text-white font-semibold">💰 Prix par quantité (Meet up / Livraison)</label>
               <button
                 type="button"
                 onClick={addVariant}
@@ -698,34 +665,62 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
               {/* Indicateur de scroll sur mobile */}
               <div className="sm:hidden absolute top-0 right-0 w-6 h-6 bg-gradient-to-l from-slate-900 to-transparent pointer-events-none z-10"></div>
               {variants.map((variant, index) => (
-                <div key={index} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-slate-800/50 p-3 rounded-lg min-w-0 mobile-variant-item">
-                  <div className="flex flex-col sm:flex-row gap-2 w-full min-w-0">
-                    <input
-                      type="text"
-                      placeholder="5g"
-                      value={variant.name}
-                      onChange={(e) => updateVariant(index, 'name', e.target.value)}
-                      className="w-full sm:flex-1 px-3 py-2 bg-slate-800 border border-gray-700/30 rounded text-white focus:outline-none focus:border-white min-w-0"
-                      required
-                    />
-                    <input
-                      type="text"
-                      placeholder="20€"
-                      value={variant.price}
-                      onChange={(e) => updateVariant(index, 'price', e.target.value)}
-                      className="w-full sm:flex-1 px-3 py-2 bg-slate-800 border border-gray-700/30 rounded text-white focus:outline-none focus:border-white min-w-0"
-                      required
-                    />
+                <div key={index} className="bg-slate-800/50 p-4 rounded-lg min-w-0 mobile-variant-item">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 items-center">
+                    {/* Quantité */}
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-1">Quantité</label>
+                      <input
+                        type="text"
+                        placeholder="5g"
+                        value={variant.name}
+                        onChange={(e) => updateVariant(index, 'name', e.target.value)}
+                        className="w-full px-3 py-2 bg-slate-800 border border-gray-700/30 rounded text-white focus:outline-none focus:border-white min-w-0"
+                        required
+                      />
+                    </div>
+                    
+                    {/* Prix Meet up */}
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-1">🤝 Meet up</label>
+                      <input
+                        type="number"
+                        placeholder="40"
+                        value={variant.meetupPrice}
+                        onChange={(e) => updateVariant(index, 'meetupPrice', e.target.value)}
+                        className="w-full px-3 py-2 bg-slate-800 border border-gray-700/30 rounded text-white focus:outline-none focus:border-white min-w-0"
+                        required
+                      />
+                    </div>
+                    
+                    {/* Prix Livraison */}
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-1">🚚 Livraison</label>
+                      <input
+                        type="number"
+                        placeholder="50"
+                        value={variant.livraisonPrice}
+                        onChange={(e) => updateVariant(index, 'livraisonPrice', e.target.value)}
+                        className="w-full px-3 py-2 bg-slate-800 border border-gray-700/30 rounded text-white focus:outline-none focus:border-white min-w-0"
+                        required
+                      />
+                    </div>
+                    
+                    {/* Bouton supprimer */}
+                    <div className="flex items-end">
+                      {variants.length > 1 ? (
+                        <button
+                          type="button"
+                          onClick={() => removeVariant(index)}
+                          className="w-full px-3 py-2 bg-gray-800/20 text-gray-400 rounded hover:bg-gray-700/30 flex items-center justify-center"
+                        >
+                          🗑️ Supprimer
+                        </button>
+                      ) : (
+                        <div className="w-full h-10"></div>
+                      )}
+                    </div>
                   </div>
-                  {variants.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeVariant(index)}
-                      className="w-full sm:w-auto px-3 py-2 bg-gray-800/20 text-gray-400 rounded hover:bg-gray-700/30 flex items-center justify-center flex-shrink-0 mt-2 sm:mt-0"
-                    >
-                      🗑️
-                    </button>
-                  )}
                 </div>
               ))}
               {/* Indicateur de scroll en bas sur mobile */}

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Footer from '../components/Footer'
-import ProductLoading from '../components/ProductLoading'
 
 const Products = () => {
   const [searchParams] = useSearchParams()
@@ -10,14 +9,12 @@ const Products = () => {
   const [allProducts, setAllProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [farms, setFarms] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedFarm, setSelectedFarm] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   const [previewProduct, setPreviewProduct] = useState(null)
-  const [loadingMessage, setLoadingMessage] = useState('Chargement des produits...')
-  const [loadingProgress, setLoadingProgress] = useState(0)
 
   useEffect(() => {
     fetchData()
@@ -42,38 +39,19 @@ const Products = () => {
 
   const fetchData = async () => {
     try {
-      setLoadingMessage('Récupération des données...')
-      setLoadingProgress(20)
-      
       const { getAll } = await import('../utils/api')
       
-      setLoadingMessage('Chargement des produits...')
-      setLoadingProgress(40)
       const productsData = await getAll('products')
-      
-      setLoadingMessage('Chargement des catégories...')
-      setLoadingProgress(60)
       const categoriesData = await getAll('categories')
-      
-      setLoadingMessage('Chargement des fermes...')
-      setLoadingProgress(80)
       const farmsData = await getAll('farms')
       
-      setLoadingMessage('Finalisation...')
-      setLoadingProgress(90)
       setAllProducts(productsData)
       setProducts(productsData)
       setCategories(categoriesData)
       setFarms(farmsData)
-      
-      setLoadingMessage('Terminé!')
-      setLoadingProgress(100)
-      await new Promise(resolve => setTimeout(resolve, 500))
     } catch (error) {
       console.error('Erreur lors du chargement des produits:', error)
       setProducts([])
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -107,13 +85,10 @@ const Products = () => {
     setSelectedFarm('')
   }
 
-  if (loading) {
-    return <ProductLoading message={loadingMessage} progress={loadingProgress} />
-  }
 
   return (
     <div className="min-h-screen cosmic-bg">
-      <div className="pt-20 pb-8 sm:pb-16 lg:pb-24 px-4">
+      <div className="pt-20 pb-24 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <motion.div
@@ -222,7 +197,7 @@ const Products = () => {
               <p className="text-gray-400 text-xl">Aucun produit disponible pour le moment</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-20">
               {Array.isArray(products) && products.map((product, index) => (
                 <ProductCard 
                   key={product.id} 
@@ -277,7 +252,18 @@ const ProductCard = ({ product, index, onPreview, categories, farms }) => {
   
   // Afficher le premier média disponible (photo en priorité)
   const displayImage = allMedias[0] || product.photo || product.image || product.video
-  const basePrice = product.variants?.[0]?.price || product.price
+  // Prix par défaut pour l'affichage des cartes
+  const getDisplayPrice = (product) => {
+    if (product.variants && product.variants.length > 0) {
+      const firstVariant = product.variants[0]
+      if (firstVariant.meetupPrice && firstVariant.livraisonPrice) {
+        return `${firstVariant.meetupPrice}€ / ${firstVariant.livraisonPrice}€`
+      }
+    }
+    return '5g 40€ / 50€'
+  }
+  
+  const basePrice = getDisplayPrice(product)
   
   // Fonction pour détecter si c'est une vidéo
   const isVideo = (url) => {
@@ -366,12 +352,13 @@ const ProductCard = ({ product, index, onPreview, categories, farms }) => {
           )}
         </div>
         
+        {/* Prix affiché directement */}
+        <div className="mb-3">
+          <div className="text-lg font-bold text-white mb-1">{basePrice}</div>
+          <div className="text-sm text-gray-300">Meet up / Livraison</div>
+        </div>
+        
         <div className="flex items-center justify-between gap-1 sm:gap-2">
-          {product.variants && product.variants.length > 1 && (
-            <p className="text-xs sm:text-sm text-theme-secondary hidden sm:block">
-              {product.variants.length} options
-            </p>
-          )}
           <Link to={`/products/${product.id}`} className="ml-auto">
             <button className="px-2 sm:px-3 lg:px-4 py-1 sm:py-2 bg-gradient-to-r from-white to-gray-200 rounded-lg text-black font-semibold hover:from-gray-200 hover:to-gray-400 transition-all text-xs sm:text-sm">
               Voir
@@ -384,24 +371,51 @@ const ProductCard = ({ product, index, onPreview, categories, farms }) => {
 }
 
 const ProductPreview = ({ product, onClose, categories, farms }) => {
-  const [selectedVariant, setSelectedVariant] = useState(0)
+  const [selectedQuantity, setSelectedQuantity] = useState('')
+  const [selectedDelivery, setSelectedDelivery] = useState('meetup')
   
-  // Convertir prices en variants si nécessaire
-  let variants = product.variants || [];
+  // Construire le pricing à partir des variants du produit
+  const pricing = {}
+  const quantities = []
   
-  // Si pas de variants, essayer de convertir depuis prices
-  if (!Array.isArray(variants) || variants.length === 0) {
-    if (product.prices && typeof product.prices === 'object') {
-      variants = Object.entries(product.prices).map(([name, price]) => ({
-        name,
-        price: typeof price === 'number' ? `${price}€` : price.toString()
-      }));
-    } else if (product.price) {
-      variants = [{ name: 'Standard', price: product.price }];
-    }
+  if (product.variants && product.variants.length > 0) {
+    product.variants.forEach(variant => {
+      if (variant.name && variant.meetupPrice && variant.livraisonPrice) {
+        pricing[variant.name] = {
+          meetup: parseInt(variant.meetupPrice) || 0,
+          livraison: parseInt(variant.livraisonPrice) || 0
+        }
+        quantities.push(variant.name)
+      }
+    })
   }
+
+  // Fallback si pas de variants
+  if (quantities.length === 0) {
+    const defaultPricing = {
+      '5g': { meetup: 40, livraison: 50 },
+      '10g': { meetup: 70, livraison: 90 },
+      '25g': { meetup: 110, livraison: 140 },
+      '50g': { meetup: 220, livraison: 250 },
+      '100g': { meetup: 440, livraison: 470 }
+    }
+    Object.assign(pricing, defaultPricing)
+    quantities.push(...Object.keys(defaultPricing))
+  }
+
+  // Initialiser la première quantité sélectionnée
+  React.useEffect(() => {
+    if (quantities.length > 0 && !selectedQuantity) {
+      setSelectedQuantity(quantities[0])
+    }
+  }, [quantities, selectedQuantity])
   
-  const currentVariant = variants[selectedVariant] || variants[0] || { name: 'Standard', price: product?.price || 'N/A' }
+  const deliveryOptions = [
+    { value: 'meetup', label: 'Meet up', icon: '🤝' },
+    { value: 'livraison', label: 'Livraison', icon: '🚚' }
+  ]
+  
+  const currentPrice = pricing[selectedQuantity]?.[selectedDelivery] || 0
   
   // Trouver les noms de catégorie et farm (convertir en string pour la comparaison)
   const categoryName = categories?.find(c => String(c.id) === String(product.category))?.name || product.category
@@ -505,23 +519,60 @@ const ProductPreview = ({ product, onClose, categories, farms }) => {
 
             <p className="text-theme leading-relaxed text-sm sm:text-base">{product.description}</p>
 
-            {/* Variantes */}
+            {/* Sélection quantité */}
             <div className="space-y-2 sm:space-y-3">
-              <h3 className="text-base sm:text-lg font-bold text-theme-heading">💰 Quantité & Prix</h3>
-              {Array.isArray(variants) && variants.map((variant, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedVariant(index)}
-                  className={`w-full p-2 sm:p-3 rounded-lg border-2 transition-all flex items-center justify-between ${
-                    selectedVariant === index
-                      ? 'border-white bg-white/10 text-white'
-                      : 'border-gray-700/30 bg-slate-800/50 text-gray-300 hover:border-white/50'
-                  }`}
-                >
-                  <span className="font-semibold text-sm sm:text-base">{variant.name}</span>
-                  <span className="text-lg sm:text-xl font-bold text-theme-accent">{variant?.price || 'N/A'}</span>
-                </button>
-              ))}
+              <h3 className="text-base sm:text-lg font-bold text-theme-heading">💰 Quantité</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {quantities.map((quantity) => (
+                  <button
+                    key={quantity}
+                    onClick={() => setSelectedQuantity(quantity)}
+                    className={`p-2 rounded-lg border-2 transition-all text-center ${
+                      selectedQuantity === quantity
+                        ? 'border-white bg-white/10 text-white'
+                        : 'border-gray-700/30 bg-slate-800/50 text-gray-300 hover:border-white/50'
+                    }`}
+                  >
+                    <div className="text-sm font-bold">{quantity}</div>
+                    <div className="text-xs text-gray-400">
+                      {pricing[quantity]?.meetup}€ / {pricing[quantity]?.livraison}€
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Sélection livraison */}
+            <div className="space-y-2 sm:space-y-3">
+              <h3 className="text-base sm:text-lg font-bold text-theme-heading">🚚 Livraison</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {deliveryOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() => setSelectedDelivery(option.value)}
+                    className={`p-2 rounded-lg border-2 transition-all flex items-center justify-center space-x-1 ${
+                      selectedDelivery === option.value
+                        ? 'border-white bg-white/10 text-white'
+                        : 'border-gray-700/30 bg-slate-800/50 text-gray-300 hover:border-white/50'
+                    }`}
+                  >
+                    <span>{option.icon}</span>
+                    <span className="text-sm font-semibold">{option.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Prix final */}
+            <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-lg p-3">
+              <div className="text-center">
+                <div className="text-sm text-gray-300 mb-1">
+                  {selectedQuantity} - {deliveryOptions.find(opt => opt.value === selectedDelivery)?.label}
+                </div>
+                <div className="text-2xl font-bold text-white">
+                  {currentPrice}€
+                </div>
+              </div>
             </div>
 
             <Link to={`/products/${product.id}`}>
