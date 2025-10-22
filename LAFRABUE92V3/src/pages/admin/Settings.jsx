@@ -8,7 +8,9 @@ const AdminSettings = () => {
     shopName: 'AVEC Amour',
     heroTitle: 'OG LEGACY',
     heroSubtitle: 'Votre texte d\'accueil',
-    backgroundImage: ''
+    backgroundImage: '',
+    orderLink: 'https://wa.me/33123456789',
+    orderButtonText: 'Commander maintenant'
   })
   const [sections, setSections] = useState([])
   const [loading, setLoading] = useState(true)
@@ -215,6 +217,37 @@ const AdminSettings = () => {
                   className="w-full px-4 py-3 bg-black border border-gray-700 rounded-lg text-white focus:outline-none focus:border-gray-500 transition-colors resize-none"
                   placeholder="Votre meilleur café à Paris"
                 />
+              </div>
+
+              {/* Liens de commande */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-white">Liens de Commande</h3>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Lien de Commande (WhatsApp, Telegram, etc.)
+                  </label>
+                  <input
+                    type="url"
+                    value={settings.orderLink || ''}
+                    onChange={(e) => setSettings({...settings, orderLink: e.target.value})}
+                    className="w-full px-3 py-2 bg-slate-800 border border-gray-600 rounded-lg text-white"
+                    placeholder="https://wa.me/33123456789"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Texte du Bouton de Commande
+                  </label>
+                  <input
+                    type="text"
+                    value={settings.orderButtonText || 'Commander maintenant'}
+                    onChange={(e) => setSettings({...settings, orderButtonText: e.target.value})}
+                    className="w-full px-3 py-2 bg-slate-800 border border-gray-600 rounded-lg text-white"
+                    placeholder="Commander maintenant"
+                  />
+                </div>
               </div>
             </div>
           </div>

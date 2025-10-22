@@ -1,7 +1,7 @@
 {
-  "name": "lafrabue92v3",
+  "name": "oglegacyv3",
   "version": "1.0.0",
-  "description": "LAFRABUE92V3 - Boutique e-commerce",
+  "description": "OGLEGACYV3 - Boutique e-commerce",
   "type": "module",
   "scripts": {
     "dev": "vite",
