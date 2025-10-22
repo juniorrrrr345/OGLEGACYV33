@@ -5,7 +5,7 @@ compatibility_date = "2024-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "oglegacy-db"
-database_id = "VOTRE-DATABASE-ID"
+database_id = "79aaf025-058a-4f88-b71f-51be3184d554"
 
 [[r2_buckets]]
 binding = "R2"
