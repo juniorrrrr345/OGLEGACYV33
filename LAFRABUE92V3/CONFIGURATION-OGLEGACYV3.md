@@ -15,7 +15,7 @@
 ### 1. Créer le dépôt GitHub
 ```bash
 # Aller sur GitHub.com et créer un nouveau repo
-# Nom: OGLEGACYV3
+# Nom: OGLEGACYV33
 # Public ou Private selon vos préférences
 # NE PAS initialiser avec README
 ```
@@ -24,7 +24,7 @@
 ```bash
 cd /workspace/OGLEGACYV3/LAFRABUE92V3
 git remote remove origin
-git remote add origin https://github.com/juniorrrrr345/OGLEGACYV3.git
+git remote add origin https://github.com/juniorrrrr345/OGLEGACYV33.git
 git add .
 git commit -m "Configuration initiale OGLEGACYV3"
 git push -u origin main
