@@ -1,0 +1,12 @@
+name = "ecommerce-worker"
+main = "worker/index.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ecommerce-db"
+database_id = "PLACEHOLDER-DATABASE-ID"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "ecommerce-media"

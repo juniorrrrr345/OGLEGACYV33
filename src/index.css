@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-slate-950 text-white;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .neon-border {
+    @apply border border-cyan-400;
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.3), inset 0 0 10px rgba(34, 211, 238, 0.1);
+  }
+  
+  .neon-text {
+    @apply text-cyan-400;
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+  }
+  
+  .glass-effect {
+    @apply bg-slate-900/80 backdrop-blur-sm border border-slate-700/50;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105;
+  }
+  
+  .btn-secondary {
+    @apply bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg border border-slate-600 transition-all duration-200;
+  }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px #00f5ff, 0 0 10px #00f5ff, 0 0 15px #00f5ff;
+  }
+  to {
+    text-shadow: 0 0 10px #00f5ff, 0 0 20px #00f5ff, 0 0 30px #00f5ff;
+  }
+}
