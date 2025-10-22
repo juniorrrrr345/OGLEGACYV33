@@ -286,7 +286,7 @@ const ProductCard = ({ product, index, onPreview, categories, farms }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       whileHover={{ scale: 1.05 }}
-      className="neon-border rounded-2xl overflow-hidden bg-slate-900/50 backdrop-blur-sm group cursor-pointer"
+      className="border border-white/30 rounded-2xl overflow-hidden bg-slate-900/50 backdrop-blur-sm group cursor-pointer"
     >
       {/* Image ou Vidéo */}
       <div className="relative h-32 sm:h-48 md:h-64 lg:h-72 overflow-hidden bg-slate-800" onClick={onPreview}>
@@ -449,7 +449,7 @@ const ProductPreview = ({ product, onClose, categories, farms }) => {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="neon-border rounded-2xl p-0 bg-slate-900 max-w-4xl w-full max-h-[95vh] overflow-hidden"
+        className="border border-white/30 rounded-2xl p-0 bg-slate-900 max-w-4xl w-full max-h-[95vh] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 max-h-[95vh]">

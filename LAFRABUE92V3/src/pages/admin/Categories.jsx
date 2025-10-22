@@ -81,7 +81,7 @@ const AdminCategories = () => {
             key={category.id}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="neon-border rounded-2xl p-6 bg-slate-900/50 backdrop-blur-sm"
+            className="border border-white/30 rounded-2xl p-6 bg-slate-900/50 backdrop-blur-sm"
           >
             {category.icon && category.icon.startsWith('http') ? (
               <div className="w-full h-32 mb-4 rounded-lg overflow-hidden bg-slate-800">
@@ -210,7 +210,7 @@ const CategoryModal = ({ category, onClose, onSuccess }) => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="neon-border rounded-2xl p-8 bg-slate-900 w-full"
+          className="border border-white/30 rounded-2xl p-8 bg-slate-900 w-full"
           onClick={(e) => e.stopPropagation()}
         >
         <h2 className="text-3xl font-bold text-gradient mb-6">

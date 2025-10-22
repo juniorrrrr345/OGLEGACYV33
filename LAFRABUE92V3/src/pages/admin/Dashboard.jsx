@@ -21,7 +21,7 @@ const Dashboard = () => {
         <Link to="/admin/products">
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="neon-border rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm hover:bg-slate-900/70 transition-all cursor-pointer"
+            className="border border-white/30 rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm hover:bg-slate-900/70 transition-all cursor-pointer"
           >
             <div className="text-5xl mb-3">📦</div>
             <h3 className="text-white font-bold text-lg">Produits</h3>
@@ -32,7 +32,7 @@ const Dashboard = () => {
         <Link to="/admin/categories">
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="neon-border rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm hover:bg-slate-900/70 transition-all cursor-pointer"
+            className="border border-white/30 rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm hover:bg-slate-900/70 transition-all cursor-pointer"
           >
             <div className="text-5xl mb-3">📁</div>
             <h3 className="text-white font-bold text-lg">Catégories</h3>
@@ -43,7 +43,7 @@ const Dashboard = () => {
         <Link to="/admin/farms">
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="neon-border rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm hover:bg-slate-900/70 transition-all cursor-pointer"
+            className="border border-white/30 rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm hover:bg-slate-900/70 transition-all cursor-pointer"
           >
             <div className="text-5xl mb-3">🌾</div>
             <h3 className="text-white font-bold text-lg">Farms</h3>
@@ -54,7 +54,7 @@ const Dashboard = () => {
         <Link to="/admin/settings">
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="neon-border rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm hover:bg-slate-900/70 transition-all cursor-pointer"
+            className="border border-white/30 rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm hover:bg-slate-900/70 transition-all cursor-pointer"
           >
             <div className="text-5xl mb-3">⚙️</div>
             <h3 className="text-white font-bold text-lg">Configuration</h3>

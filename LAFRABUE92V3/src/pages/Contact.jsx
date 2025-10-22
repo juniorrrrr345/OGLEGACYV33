@@ -41,7 +41,7 @@ const Contact = () => {
             transition={{ delay: 0.2 }}
             className="max-w-2xl mx-auto"
           >
-            <div className="neon-border rounded-2xl p-8 bg-slate-900/50 backdrop-blur-sm">
+            <div className="border border-white/30 rounded-2xl p-8 bg-slate-900/50 backdrop-blur-sm">
               <h3 className="text-2xl font-bold text-theme-heading mb-6 flex items-center justify-center">
                 <span className="text-4xl mr-3">🌐</span>
                 Réseaux Sociaux

@@ -179,7 +179,7 @@ const FarmModal = ({ farm, onClose, onSuccess }) => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="neon-border rounded-2xl p-6 bg-slate-900 w-full"
+          className="border border-white/30 rounded-2xl p-6 bg-slate-900 w-full"
           onClick={(e) => e.stopPropagation()}
         >
         <h2 className="text-2xl font-bold text-white mb-6">

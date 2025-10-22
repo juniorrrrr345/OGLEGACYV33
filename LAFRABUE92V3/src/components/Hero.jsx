@@ -103,7 +103,7 @@ const MenuSection = ({ icon, title, content, isOpen, onClick }) => {
   return (
     <motion.div
       whileHover={{ scale: 1.02, x: 10 }}
-      className="neon-border rounded-lg bg-slate-900/50 backdrop-blur-sm cursor-pointer group transition-all duration-300 overflow-hidden"
+      className="border border-white/30 rounded-lg bg-slate-900/50 backdrop-blur-sm cursor-pointer group transition-all duration-300 overflow-hidden"
     >
       <div className="p-4" onClick={onClick}>
         <div className="flex items-center justify-between">

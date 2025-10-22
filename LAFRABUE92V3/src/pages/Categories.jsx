@@ -107,7 +107,7 @@ const CategoryCard = ({ category, index, count, gradient }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
       whileHover={{ scale: 1.05, y: -10 }}
-      className="neon-border rounded-2xl overflow-hidden bg-slate-900/50 backdrop-blur-sm group cursor-pointer"
+      className="border border-white/30 rounded-2xl overflow-hidden bg-slate-900/50 backdrop-blur-sm group cursor-pointer"
     >
       <Link to={`/products?category=${category.id}`} className="block">
         {/* Icon/Image Section */}

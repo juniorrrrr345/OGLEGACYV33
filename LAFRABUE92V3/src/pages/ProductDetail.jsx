@@ -149,7 +149,7 @@ const ProductDetail = () => {
               className="space-y-4"
             >
               {/* Média Principal */}
-              <div className="neon-border rounded-2xl overflow-hidden bg-slate-900/50 backdrop-blur-sm aspect-square sm:aspect-square">
+              <div className="border border-white/30 rounded-2xl overflow-hidden bg-slate-900/50 backdrop-blur-sm aspect-square sm:aspect-square">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={selectedMedia}
@@ -277,7 +277,7 @@ const ProductDetail = () => {
               </div>
 
               {/* Description */}
-              <div className="neon-border rounded-xl p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30">
+              <div className="border border-white/30 rounded-xl p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30">
                 <h3 className="text-base sm:text-lg lg:text-xl font-bold text-white mb-2 sm:mb-3">📝 Description</h3>
                 <p className="text-gray-300 leading-relaxed whitespace-pre-line text-xs sm:text-sm lg:text-base">
                   {product.description}
@@ -285,7 +285,7 @@ const ProductDetail = () => {
               </div>
 
               {/* Sélecteur de prix */}
-              <div className="neon-border rounded-xl p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30">
+              <div className="border border-white/30 rounded-xl p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30">
                 <PricingSelector 
                   onSelectionChange={handlePricingSelection} 
                   productVariants={product.variants || []}
@@ -293,7 +293,7 @@ const ProductDetail = () => {
               </div>
 
               {/* Commande */}
-              <div className="neon-border rounded-xl p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30 space-y-3 sm:space-y-4">
+              <div className="border border-white/30 rounded-xl p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-2 border-white/30 space-y-3 sm:space-y-4">
                 <button
                   onClick={handleCommand}
                   className="w-full py-2 sm:py-3 lg:py-4 bg-gradient-to-r from-white to-gray-200 rounded-lg text-black font-bold text-sm sm:text-base lg:text-lg hover:from-gray-200 hover:to-gray-400 transition-all transform hover:scale-105 flex items-center justify-center space-x-1 sm:space-x-2"

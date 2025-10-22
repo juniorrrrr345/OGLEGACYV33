@@ -60,7 +60,7 @@ const SocialModal = ({ social, onClose, onSuccess }) => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="neon-border rounded-2xl p-6 sm:p-8 bg-slate-900 w-full"
+          className="border border-white/30 rounded-2xl p-6 sm:p-8 bg-slate-900 w-full"
           onClick={(e) => e.stopPropagation()}
         >
         <h2 className="text-2xl sm:text-3xl font-bold text-gradient mb-4 sm:mb-6">
@@ -221,7 +221,7 @@ const AdminSocials = () => {
             key={social.id}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="neon-border rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm flex items-center justify-between"
+            className="border border-white/30 rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm flex items-center justify-between"
           >
             <div className="flex items-center space-x-4 flex-1">
               <span className="text-4xl">{social.icon}</span>

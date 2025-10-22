@@ -83,7 +83,7 @@ const Maintenance = () => {
         )}
 
         {/* Configuration */}
-        <div className="neon-border rounded-2xl p-8 bg-slate-900/50 backdrop-blur-sm space-y-6">
+        <div className="border border-white/30 rounded-2xl p-8 bg-slate-900/50 backdrop-blur-sm space-y-6">
           {/* Toggle Maintenance */}
           <div className="flex items-center justify-between p-6 bg-black/30 rounded-xl border border-gray-700/50">
             <div>

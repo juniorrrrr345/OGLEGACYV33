@@ -46,7 +46,7 @@ const AdminLogin = () => {
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-md"
       >
-        <div className="neon-border rounded-2xl p-8 bg-slate-900/80 backdrop-blur-md">
+        <div className="border border-white/30 rounded-2xl p-8 bg-slate-900/80 backdrop-blur-md">
           {/* Logo */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gradient glow-effect mb-2">

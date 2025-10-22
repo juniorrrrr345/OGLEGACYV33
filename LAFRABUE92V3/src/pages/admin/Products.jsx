@@ -145,7 +145,7 @@ const AdminProducts = () => {
       </div>
 
       {/* Products Grid - Mobile | Table - Desktop */}
-      <div className="neon-border rounded-2xl overflow-hidden bg-slate-900/50 backdrop-blur-sm">
+      <div className="border border-white/30 rounded-2xl overflow-hidden bg-slate-900/50 backdrop-blur-sm">
         {/* Mobile Grid View */}
         <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
           {products.map((product) => (
@@ -496,7 +496,7 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="neon-border rounded-2xl bg-slate-900 w-full max-h-[90vh] sm:max-h-[95vh] flex flex-col"
+          className="border border-white/30 rounded-2xl bg-slate-900 w-full max-h-[90vh] sm:max-h-[95vh] flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header fixe */}
